@@ -12,7 +12,7 @@ class TurnoDAO(DAO):
     def criar(self):
         try:
             with self.conexao:
-                self.cursor.execute(f"""
+                self.cursor.executa(f"""
           CREATE TABLE IF NOT EXISTS {self.nomeTabela}
             (
               id INTEGER PRIMARY KEY,
@@ -29,7 +29,7 @@ class TurnoDAO(DAO):
     @staticmethod
     def buscar() -> list:
         try:
-            res = TurnoDAO.cursor.execute(
+            res = TurnoDAO.cursor.executa(
                 f"SELECT * FROM {TurnoDAO.nome_tabela}")
             return [dict(row) for row in res.fetchall()]
         except:

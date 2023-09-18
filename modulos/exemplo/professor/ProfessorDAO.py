@@ -13,7 +13,7 @@ class ProfessorDAO(DAO):
     def criar(self):
         try:
             with self.conexao:
-                self.cursor.execute(f"""
+                self.cursor.executa(f"""
           CREATE TABLE IF NOT EXISTS {self.nomeTabela} 
             (
               id INTEGER PRIMARY KEY, 
@@ -30,7 +30,7 @@ class ProfessorDAO(DAO):
 
     def buscar_turnos(self) -> list:
         try:
-            res = ProfessorDAO.cursor.execute(
+            res = ProfessorDAO.cursor.executa(
                 f"SELECT * FROM {TurnoDAO.nome_tabela} WHERE professor = {self.identificador}")
             return [dict(row) for row in res.fetchall()]
         except:
@@ -39,7 +39,7 @@ class ProfessorDAO(DAO):
     @staticmethod
     def buscar() -> list:
         try:
-            res = ProfessorDAO.cursor.execute(
+            res = ProfessorDAO.cursor.executa(
                 f"SELECT * FROM {ProfessorDAO.nome_tabela}")
             return [dict(row) for row in res.fetchall()]
         except:

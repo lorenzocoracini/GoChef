@@ -12,7 +12,7 @@ class AlunoDAO(DAO):
     def criar(self):
         try:
             with self.conexao:
-                self.cursor.execute(f"""
+                self.cursor.executa(f"""
           CREATE TABLE IF NOT EXISTS {self.nomeTabela} 
             (
               id INTEGER PRIMARY KEY, 
@@ -30,7 +30,7 @@ class AlunoDAO(DAO):
     @staticmethod
     def buscar() -> list:
         try:
-            res = AlunoDAO.cursor.execute(
+            res = AlunoDAO.cursor.executa(
                 f"SELECT * FROM {AlunoDAO.nome_tabela}")
             return [dict(row) for row in res.fetchall()]
         except:
