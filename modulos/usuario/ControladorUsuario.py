@@ -2,11 +2,11 @@ from datetime import date
 
 from erros.ErroEntradaVazia import ErroEntradaVazia
 from erros.ErroNaoEncontrado import ErroNaoEncontrado
-from modulos.exemplo.aluno.EntidadeAluno import Aluno
+from modulos.usuario.EntidadeUsuario import Usuario
 
-class ControladorAluno:
+class ControladorUsuario:
   def __init__(self):
-    self.__alunos = []
+    self.__usuarios = []
     try:
       self.carregar_dados()
     except ErroEntradaVazia:
@@ -14,17 +14,16 @@ class ControladorAluno:
 
   @property
   def colecao(self):
-    return self.__alunos
+    return self.__usuarios
 
   @colecao.setter
   def colecao(self, colecao):
-    self.__alunos = colecao
+    self.__usuarios = colecao
 
   def cadastrar(self, dados: dict):
     try:
-      dados['data_matricula'] = date.today()
-      novo_aluno = Aluno(**dados)
-      novo_aluno.guardar()
+      novo_usuario = Usuario(**dados)
+      novo_usuario.guardar()
       self.carregar_dados()
     except:
       raise ValueError
@@ -40,22 +39,12 @@ class ControladorAluno:
     except:
       raise ValueError
 
-  def deletar(self, id):
-    try:
-      [objeto, _] = self.buscar_por_id(id)
-      objeto.remover()
-      self.carregar_dados()
-    except ErroNaoEncontrado:
-      raise ErroNaoEncontrado
-    except:
-      raise ValueError
-
   def carregar_dados(self):
     # Busca todos os cadastros e popula a listagem
-    result = Aluno.buscar()
+    result = Usuario.buscar()
     self.colecao = []
     for dados in result:
-      objeto = Aluno(**dados)
+      objeto = Usuario(**dados)
       self.colecao.append(objeto)
 
   def buscar_por_id(self, id):

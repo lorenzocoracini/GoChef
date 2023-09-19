@@ -31,9 +31,8 @@ class DAO(ABC):
         return attributos_classe
 
     @property
-    @abstractmethod
     def identificador(self):
-        ''' GETTER: Deve retornar o valor da propriedade identificadora da instancia '''
+        return self.id
 
     @abstractmethod
     def criar(self):
