@@ -11,11 +11,11 @@ class RestauranteDAO(DAO):
     def criar(self):
         try:
             with self.conexao:
-                self.cursor.executa(f"""
+                self.cursor.execute(f"""
           CREATE TABLE IF NOT EXISTS {self.nomeTabela} 
             (
               id INTEGER PRIMARY KEY, 
-              capacidade_maxima INTEGER,
+              capacidade_maxima INTEGER
             )
         """)
             return True
@@ -25,8 +25,8 @@ class RestauranteDAO(DAO):
     @staticmethod
     def buscar() -> list:
         try:
-            res = RestauranteDAO.cursor.executa(
+            res = RestauranteDAO.cursor.execute(
                 f"SELECT * FROM {RestauranteDAO.nome_tabela}")
             return [dict(row) for row in res.fetchall()]
         except:
-            raise ErroEntradaVazia
+            return None
