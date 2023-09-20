@@ -38,6 +38,7 @@ class ControladorRestaurante:
 
     def incluir_restaurante(self):
         dados = self.__tela.mostra_opcoes('Informações do Restaurante')
+        print(dados)
         novo_restaurante = Restaurante(int(dados['capacidade_maxima']))
         novo_restaurante.guardar()
         self.__restaurante = novo_restaurante
@@ -52,13 +53,13 @@ class ControladorRestaurante:
         pass
 
     # def cadastrar(self, dados: dict, turnos: list):
-        try:
-            novo_professor = Professor(**dados)
-            novo_professor.guardar()
-            self.cadastrar_turno(novo_professor.identificador, turnos)
-            self.carregar_dados()
-        except:
-            raise ValueError
+        # try:
+        #     novo_professor = Professor(**dados)
+        #     novo_professor.guardar()
+        #     self.cadastrar_turno(novo_professor.identificador, turnos)
+        #     self.carregar_dados()
+        # except:
+        #     raise ValueError
 
 
 #   def editar(self, id, dados: dict, turnos: list):

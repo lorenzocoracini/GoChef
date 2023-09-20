@@ -6,7 +6,10 @@ class TelaRestaurante:
         sg.ChangeLookAndFeel('Material2')
         self.__window = None
 
-    def mostra_opcoes(self, nome_tela: str, layout_pre_definido=None):
+    def mostra_mensagem_erro(self, mensagem: str) -> None:
+        sg.popup_error(mensagem)
+
+    def mostra_opcoes(self, nome_tela: str):
         layout = [
             [sg.Text('Tela Inicial')],
             [sg.Text('Capacidade máxima de pessoas', size=(15, 1)),
@@ -14,22 +17,38 @@ class TelaRestaurante:
             [sg.Text('Cidade permitidas', size=(15, 1)),
              sg.InputText(key='cidade', do_not_clear=False),
              sg.Button('Adicionar cidade')],
+            [sg.Column([], key='cidades_section')],
             [sg.Button('Confirmar')]
         ]
-        if layout_pre_definido is not None:
-            layout = layout_pre_definido
 
         self.__window = sg.Window(nome_tela).Layout(layout)
-        while True:
+        botao, valores = self.abre()
+        cidades = []
+
+        while botao == 'Adicionar cidade':
+            cidade_adicionada = valores['cidade']
+
+            if cidade_adicionada.isdecimal():
+                self.mostra_mensagem_erro(
+                    'O nome da cidade não deve ser composta por dígitos')
+                botao, valores = self.abre()
+                continue
+
+            cidades.append(cidade_adicionada)
+            self.__window.extend_layout(
+                self.__window['cidades_section'], [[sg.Text(f'- {cidade_adicionada}')]])
+            self.__window.refresh()
             botao, valores = self.abre()
-            if botao == 'Adicionar cidade':
-                print('BOTÃO', botao)
-                print('VALORES', valores)
-                # tratar adicao de cidades
-                # return
-            else:
-                break
-        return valores
+
+        while botao == 'Confirmar' and not valores['capacidade_maxima'].isdigit():
+            self.mostra_mensagem_erro(
+                'A capacidade máxima do restaurante deve ser um número!')
+            botao, valores = self.abre()
+
+        return {
+            'capacidade_maxima': valores['capacidade_maxima'],
+            'cidades': cidades,
+        }
 
     def abre(self):
         return self.__window.Read()
