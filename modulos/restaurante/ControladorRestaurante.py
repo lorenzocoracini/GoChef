@@ -1,5 +1,3 @@
-import random
-
 from modulos.restaurante.EntidadeRestaurante import Restaurante
 from modulos.restaurante.TelaRestaurante import TelaRestaurante
 from modulos.restaurante.cidade.EntidadeCidadeTeleEntrega import CidadeTeleEntrega
