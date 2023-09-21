@@ -91,6 +91,7 @@ class TelaRestaurante:
                     capacidade_maxima = self.valida_inteiro(
                         valores['capacidade_maxima'], 'capacidade máxima')
 
+                    self.fecha()
                     return {
                         'capacidade_maxima': capacidade_maxima,
                         'cidades': cidades,

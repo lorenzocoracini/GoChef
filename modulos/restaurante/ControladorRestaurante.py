@@ -11,7 +11,7 @@ class ControladorRestaurante:
             self.carregar_dados_restaurante()
             self.carregar_dados_cidades()
         except:
-            self.cadastrar_dados_iniciais()
+            pass
 
     @property
     def restaurante(self):
