@@ -9,3 +9,5 @@ O GoChef é uma solução abrangente para aprimorar a gestão de restaurantes, s
 - [ ] arrumar bug cidades com mais de uma palavra (ex.: São José, Nova Erechim, ...)
 - [ ] adicionar menu principal do sistema
 - [ ] adicionar funcionalidade para editar as informações do restaurante
+- [ ] adiciona fluxo autenticação
+- [ ] adiciona tela abstrata
