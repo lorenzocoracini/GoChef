@@ -1,4 +1,4 @@
-from modulos.sistema.ControladroSistema import ControladorSistema
+from modulos.sistema.ControladorSistema import ControladorSistema
 
 
 if __name__ == "__main__":
