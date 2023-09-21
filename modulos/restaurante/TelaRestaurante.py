@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import re
 
 
 class TelaRestaurante:
@@ -8,6 +9,25 @@ class TelaRestaurante:
 
     def mostra_mensagem_erro(self, mensagem: str) -> None:
         sg.popup_error(mensagem)
+
+    def valida_string(self, valor: str, min_len=None, max_len=None):
+        if valor.strip() == '':
+            raise ValueError('Entrada inválida. O valor não pode ser vazio.')
+        if re.search('\d', valor):
+            raise ValueError(
+                'Entrada inválida. O valor não deve conter dígitos.')
+        if min_len and len(valor) < min_len:
+            raise ValueError(
+                f'A entrada deve ter no mínimo {min_len} caracteres!')
+        if max_len and len(valor) > max_len:
+            raise ValueError(
+                f'A entrada deve ter no máximo {max_len} caracteres!')
+
+    def valida_inteiro(self, valor: str):
+        try:
+            return int(valor)
+        except:
+            raise ValueError('Por favor, insira um número inteiro.')
 
     def mostra_opcoes(self, nome_tela: str):
         layout = [
@@ -25,76 +45,51 @@ class TelaRestaurante:
         botao, valores = self.abre()
         cidades = []
         while True:
-            if botao == 'Adicionar cidade':
-                cidade_adicionada = valores['cidade']
-
-                if len(cidade_adicionada) == 0:
-                    self.mostra_mensagem_erro(
-                        'Insira um nome correto para a cidade!')
+            try:
+                print('BOTAO', botao)
+                if botao == 'Adicionar cidade':
+                    cidade_adicionada = valores['cidade']
+                    self.valida_string(cidade_adicionada)
+                    cidades.append(cidade_adicionada)
+                    self.__window.extend_layout(
+                        self.__window['cidades_section'], [[sg.Text(f'- {cidade_adicionada}', key=f'cidade_{cidade_adicionada}'), sg.Button('Remover cidade', key=cidade_adicionada)]])
+                    self.__window.refresh()
                     botao, valores = self.abre()
                     continue
 
-                if cidade_adicionada.isdecimal():  # TODO REGEX VERIFICADORA
-                    self.mostra_mensagem_erro(
-                        'O nome da cidade não deve ser composta por dígitos')
+                if botao in cidades:
+
+                    cidades.remove(botao)
+                    botao_remove_cidade = self.__window[f'cidade_{botao}']
+
+                    elemento_cidade = self.__window[botao]
+
+                    botao_remove_cidade.hide_row()
+                    elemento_cidade.hide_row()
+
+                    self.__window.refresh()
                     botao, valores = self.abre()
                     continue
 
-                cidades.append(cidade_adicionada)
-                self.__window.extend_layout(
-                    self.__window['cidades_section'], [[sg.Text(f'- {cidade_adicionada}')]])
-                self.__window.refresh()
+                if botao == 'Confirmar':
+                    if len(cidades) == 0:
+                        raise ValueError(
+                            'Por favor, insira pelo menos uma cidade.')
+
+                    capacidade_maxima = self.valida_inteiro(
+                        valores['capacidade_maxima'])
+
+                    return {
+                        'capacidade_maxima': capacidade_maxima,
+                        'cidades': cidades,
+                    }
+            except Exception as err:
+                self.mostra_mensagem_erro(err)
+                print(err)
                 botao, valores = self.abre()
-                continue
-
-            if botao == 'Confirmar':
-                if not valores['capacidade_maxima'].isdigit():
-                    self.mostra_mensagem_erro(
-                        'A capacidade máxima do restaurante deve ser um número!')
-                    botao, valores = self.abre()
-                    continue
-
-                if len(cidades) == 0:
-                    self.mostra_mensagem_erro(
-                        'Cadastre pelo menos uma cidade!')
-                    botao, valores = self.abre()
-                    continue
-
-                return {
-                    'capacidade_maxima': valores['capacidade_maxima'],
-                    'cidades': cidades,
-                }
 
     def abre(self):
         return self.__window.Read()
 
     def fecha(self):
         self.__window.Close()
-
-    # def executa(self):
-    #     self.pega_dados()
-    #     while True:
-    #         event, values = self.__window.read()
-    #         if event == sg.WIN_CLOSED:
-    #             break
-
-    #         if event == 'Adicionar cidade':
-    #             pass
-    #             cidade = values['cidade']
-    #             self.__layout.insert(
-    #                 3, [sg.Text(f'- {cidade}', size=(15, 1)), sg.Button('Remover Cidade')])
-    #             print(self.__layout)
-    #             self.pega_dados()
-    #         elif event == 'Confirmar':
-    #             print(event, values)
-    #             # senha_digitada = values['input_senha']
-    #             # tipo_usuario = 'gerente' if values['gerente'] else 'funcionario'
-
-    #             # if self.validacao(senha_digitada, tipo_usuario):
-    #             # print(tipo_usuario)
-    #             # return tipo_usuario
-    #             # else:
-    #             # sg.popup('Tipo de usuário ou senha incorretos')
-
-  # def pega_dados(self):
-    #     self.__window = sg.Window('Tela Inicial').layout(self.__layout)

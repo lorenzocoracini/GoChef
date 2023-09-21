@@ -31,17 +31,7 @@ class ControladorRestaurante:
         if dados_restaurante is None:
             raise Exception
 
-        # dados_cidades = CidadeTeleEntrega.buscar()
-        # cidades = [CidadeTeleEntrega(cidade) for cidade in dados_cidades]
-
         self.__restaurante = Restaurante(**dados_restaurante)
-        # self.__restaurante.cidades = cidades
-
-        # for dados in dados_restaurante:
-        #   objeto = Professor(**dados)
-        #   turnos = objeto.buscar_turnos()
-        #   objeto.turnos = turnos
-        #   self.colecao.append(objeto)
 
     def carregar_dados_cidades(self) -> None:
         dados_cidades = CidadeTeleEntrega.buscar()
@@ -51,15 +41,9 @@ class ControladorRestaurante:
         cidades = [CidadeTeleEntrega(cidade) for cidade in dados_cidades]
         self.__restaurante.cidades = cidades
 
-        # for dados in dados_restaurante:
-        #   objeto = Professor(**dados)
-        #   turnos = objeto.buscar_turnos()
-        #   objeto.turnos = turnos
-        #   self.colecao.append(objeto)
-
     def cadastrar_dados_iniciais(self):
         dados = self.__tela.mostra_opcoes('Informações do Restaurante')
-        novo_restaurante = Restaurante(int(dados['capacidade_maxima']))
+        novo_restaurante = Restaurante(dados['capacidade_maxima'])
         novo_restaurante.guardar()
         self.carregar_dados_restaurante()
         self.incluir_cidades(
@@ -70,20 +54,9 @@ class ControladorRestaurante:
         for cidade in cidades:
             nova_cidade = CidadeTeleEntrega(cidade)
             nova_cidade.guardar(restaurante_id)
-            # self.carregar_dados()
 
     def abre_tela():
         pass
-
-    # def cadastrar(self, dados: dict, turnos: list):
-        # try:
-        #     novo_professor = Professor(**dados)
-        #     novo_professor.guardar()
-        #     self.cadastrar_turno(novo_professor.identificador, turnos)
-        #     self.carregar_dados()
-        # except:
-        #     raise ValueError
-
 
 #   def editar(self, id, dados: dict, turnos: list):
 #     try:
@@ -135,6 +108,3 @@ class ControladorRestaurante:
         #     raise ErroNaoEncontrado
         # objeto = self.colecao[index]
         # return (objeto, index)
-
-# if __name__ == '__main__':
-    # ControladorRestaurante()
