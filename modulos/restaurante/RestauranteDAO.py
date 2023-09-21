@@ -22,6 +22,25 @@ class RestauranteDAO(DAO):
         except Exception:
             raise
 
+    def guardar(self):
+        atributos = [
+            key for key in self.atributos.keys() if key != 'cidades']
+        chaves = f"({','.join(atributos)})"
+        valores = tuple([v.identificador if isinstance(
+            v, DAO) else v for k, v in self.atributos.items() if k != 'cidades'])
+        parametros = '('+','.join('?' for _ in valores)+')'
+
+        try:
+            with self.conexao:
+                self.cursor.execute(f"""
+            INSERT OR IGNORE INTO {self.nomeTabela}
+            {chaves}
+            VALUES {parametros}
+            """, valores)
+                return True
+        except Exception:
+            raise
+
     @staticmethod
     def buscar() -> list:
         try:

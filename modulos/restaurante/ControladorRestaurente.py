@@ -5,6 +5,7 @@ import random
 
 from modulos.restaurante.EntidadeRestaurante import Restaurante
 from modulos.restaurante.TelaRestaurante import TelaRestaurante
+from modulos.restaurante.cidade.EntidadeCidadeTeleEntrega import CidadeTeleEntrega
 
 
 class ControladorRestaurante:
@@ -12,9 +13,10 @@ class ControladorRestaurante:
         self.__tela = TelaRestaurante()
         self.__restaurante = None
         try:
-            self.carregar_dados()
+            self.carregar_dados_restaurante()
+            self.carregar_dados_cidades()
         except:
-            self.incluir_restaurante()
+            self.cadastrar_dados_iniciais()
 
     @property
     def restaurante(self):
@@ -24,23 +26,51 @@ class ControladorRestaurante:
     def restaurante(self, restaurante):
         self.__restaurante = restaurante
 
-    def carregar_dados(self) -> None:
+    def carregar_dados_restaurante(self) -> None:
         dados_restaurante = Restaurante.buscar()
         if dados_restaurante is None:
             raise Exception
 
+        # dados_cidades = CidadeTeleEntrega.buscar()
+        # cidades = [CidadeTeleEntrega(cidade) for cidade in dados_cidades]
+
         self.__restaurante = Restaurante(**dados_restaurante)
+        # self.__restaurante.cidades = cidades
+
         # for dados in dados_restaurante:
         #   objeto = Professor(**dados)
         #   turnos = objeto.buscar_turnos()
         #   objeto.turnos = turnos
         #   self.colecao.append(objeto)
 
-    def incluir_restaurante(self):
+    def carregar_dados_cidades(self) -> None:
+        dados_cidades = CidadeTeleEntrega.buscar()
+        if dados_cidades is None:
+            raise Exception
+
+        cidades = [CidadeTeleEntrega(cidade) for cidade in dados_cidades]
+        self.__restaurante.cidades = cidades
+
+        # for dados in dados_restaurante:
+        #   objeto = Professor(**dados)
+        #   turnos = objeto.buscar_turnos()
+        #   objeto.turnos = turnos
+        #   self.colecao.append(objeto)
+
+    def cadastrar_dados_iniciais(self):
         dados = self.__tela.mostra_opcoes('Informações do Restaurante')
         novo_restaurante = Restaurante(int(dados['capacidade_maxima']))
         novo_restaurante.guardar()
-        self.carregar_dados()
+        self.carregar_dados_restaurante()
+        self.incluir_cidades(
+            dados['cidades'], self.__restaurante.identificador)
+        self.carregar_dados_cidades()
+
+    def incluir_cidades(self, cidades: list, restaurante_id: int):
+        for cidade in cidades:
+            nova_cidade = CidadeTeleEntrega(cidade)
+            nova_cidade.guardar(restaurante_id)
+            # self.carregar_dados()
 
     def abre_tela():
         pass

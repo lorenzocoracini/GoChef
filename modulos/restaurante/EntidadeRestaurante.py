@@ -1,13 +1,14 @@
 from modulos.restaurante.RestauranteDAO import RestauranteDAO
+from modulos.restaurante.cidade.EntidadeCidadeTeleEntrega import CidadeTeleEntrega
 
 
 class Restaurante(RestauranteDAO):
-    def __init__(self, capacidade_maxima: int, cidades: list, id=None) -> None:
+    def __init__(self, capacidade_maxima: int, id=None) -> None:
         super().__init__()
         if id is not None:
             self.__id = id
         self.__capacidade_maxima = capacidade_maxima
-        # self.__cidades = [Cidade(nome_cidade) for nome_cidade in cidades]
+        self.__cidades = None
 
     @property
     def identificador(self) -> int:
@@ -20,6 +21,14 @@ class Restaurante(RestauranteDAO):
     @capacidade_maxima.setter
     def capacidade_maxima(self, capacidade_maxima: int) -> None:
         self.__capacidade_maxima = capacidade_maxima
+
+    @property
+    def cidades(self) -> list:
+        return self.__cidades
+
+    @cidades.setter
+    def cidades(self, cidades: list) -> None:
+        self.__cidades = cidades
 
     @staticmethod
     def buscar():
