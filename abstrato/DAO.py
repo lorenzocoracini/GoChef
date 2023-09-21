@@ -31,9 +31,8 @@ class DAO(ABC):
         return attributos_classe
 
     @property
-    @abstractmethod
     def identificador(self):
-        ''' GETTER: Deve retornar o valor da propriedade identificadora da instancia '''
+        return self.id
 
     @abstractmethod
     def criar(self):
@@ -64,7 +63,6 @@ class DAO(ABC):
     def atualizar(self):
         set_statement = ', '.join([f"{k} = '{v}'" for k, v in self.atributos.items(
         ) if not isinstance(v, DAO) and v is not None])
-
         try:
             with self.conexao:
                 self.cursor.execute(f"""

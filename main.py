@@ -1,5 +1,5 @@
-from modulos.restaurante.ControladorRestaurente import ControladorRestaurante
+from modulos.sistema.ControladroSistema import ControladorSistema
 
 
 if __name__ == "__main__":
-    ControladorRestaurante()
+    ControladorSistema().inicializa_sistema()

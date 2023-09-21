@@ -31,7 +31,7 @@ class TelaLogin:
 
         return bcrypt.checkpw(senha_digitada.encode('utf-8'), senha_correta)
 
-    def executa(self):
+    def execute(self):
         self.pega_dados()
         while True:
             event, values = self.__window.read()
@@ -49,4 +49,4 @@ class TelaLogin:
 
 
 if __name__ == "__main__":
-    TelaLogin().executa()
+    TelaLogin().execute()
