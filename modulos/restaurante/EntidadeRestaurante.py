@@ -1,12 +1,13 @@
-import random
 from modulos.restaurante.RestauranteDAO import RestauranteDAO
 
 
 class Restaurante(RestauranteDAO):
-    def __init__(self, capacidade_maxima: int, id: int = random.randint(1000, 9999)) -> None:
+    def __init__(self, capacidade_maxima: int, cidades: list, id=None) -> None:
         super().__init__()
-        self.__id = id
+        if id is not None:
+            self.__id = id
         self.__capacidade_maxima = capacidade_maxima
+        # self.__cidades = [Cidade(nome_cidade) for nome_cidade in cidades]
 
     @property
     def identificador(self) -> int:

@@ -24,31 +24,46 @@ class TelaRestaurante:
         self.__window = sg.Window(nome_tela).Layout(layout)
         botao, valores = self.abre()
         cidades = []
+        while True:
+            if botao == 'Adicionar cidade':
+                cidade_adicionada = valores['cidade']
 
-        while botao == 'Adicionar cidade':
-            cidade_adicionada = valores['cidade']
+                if len(cidade_adicionada) == 0:
+                    self.mostra_mensagem_erro(
+                        'Insira um nome correto para a cidade!')
+                    botao, valores = self.abre()
+                    continue
 
-            if cidade_adicionada.isdecimal():
-                self.mostra_mensagem_erro(
-                    'O nome da cidade não deve ser composta por dígitos')
+                if cidade_adicionada.isdecimal():  # TODO REGEX VERIFICADORA
+                    self.mostra_mensagem_erro(
+                        'O nome da cidade não deve ser composta por dígitos')
+                    botao, valores = self.abre()
+                    continue
+
+                cidades.append(cidade_adicionada)
+                self.__window.extend_layout(
+                    self.__window['cidades_section'], [[sg.Text(f'- {cidade_adicionada}')]])
+                self.__window.refresh()
                 botao, valores = self.abre()
                 continue
 
-            cidades.append(cidade_adicionada)
-            self.__window.extend_layout(
-                self.__window['cidades_section'], [[sg.Text(f'- {cidade_adicionada}')]])
-            self.__window.refresh()
-            botao, valores = self.abre()
+            if botao == 'Confirmar':
+                if not valores['capacidade_maxima'].isdigit():
+                    self.mostra_mensagem_erro(
+                        'A capacidade máxima do restaurante deve ser um número!')
+                    botao, valores = self.abre()
+                    continue
 
-        while botao == 'Confirmar' and not valores['capacidade_maxima'].isdigit():
-            self.mostra_mensagem_erro(
-                'A capacidade máxima do restaurante deve ser um número!')
-            botao, valores = self.abre()
+                if len(cidades) == 0:
+                    self.mostra_mensagem_erro(
+                        'Cadastre pelo menos uma cidade!')
+                    botao, valores = self.abre()
+                    continue
 
-        return {
-            'capacidade_maxima': valores['capacidade_maxima'],
-            'cidades': cidades,
-        }
+                return {
+                    'capacidade_maxima': valores['capacidade_maxima'],
+                    'cidades': cidades,
+                }
 
     def abre(self):
         return self.__window.Read()

@@ -38,16 +38,9 @@ class ControladorRestaurante:
 
     def incluir_restaurante(self):
         dados = self.__tela.mostra_opcoes('Informações do Restaurante')
-        print(dados)
         novo_restaurante = Restaurante(int(dados['capacidade_maxima']))
         novo_restaurante.guardar()
-        self.__restaurante = novo_restaurante
-        # try:
-    #   self.cadastrar_turno(novo_professor.identificador, turnos)
-        # self.carregar_dados()
-        # except Exception as err:
-        #     print(err)
-        #     raise ValueError
+        self.carregar_dados()
 
     def abre_tela():
         pass
@@ -77,41 +70,41 @@ class ControladorRestaurante:
 #       raise ValueError
 
     # def deletar(self, id):
-        try:
-            [objeto, _] = self.buscar_por_id(id)
-            objeto.remover()
-            self.carregar_dados()
-        except ErroNaoEncontrado:
-            raise ErroNaoEncontrado
-        except:
-            raise ValueError
+        # try:
+        #     [objeto, _] = self.buscar_por_id(id)
+        #     objeto.remover()
+        #     self.carregar_dados()
+        # except ErroNaoEncontrado:
+        #     raise ErroNaoEncontrado
+        # except:
+        #     raise ValueError
 
     # def cadastrar_turno(self, identificador, turnos):
-        for turno in turnos:
-            turno["professor"] = identificador
-            turno["id"] = random.randint(1000, 9999)
-            novo_turno = Turno(**turno)
-            novo_turno.guardar()
-            self.carregar_dados()
+        # for turno in turnos:
+        #     turno["professor"] = identificador
+        #     turno["id"] = random.randint(1000, 9999)
+        #     novo_turno = Turno(**turno)
+        #     novo_turno.guardar()
+        #     self.carregar_dados()
 
     # def deletar_turno(self, id):
-        try:
-            turno = Turno('', '', 0, 0, id)
-            turno.remover()
-            self.carregar_dados()
-        except:
-            raise ValueError
+        # try:
+        #     turno = Turno('', '', 0, 0, id)
+        #     turno.remover()
+        #     self.carregar_dados()
+        # except:
+        #     raise ValueError
 
     # def buscar_por_id(self, id):
         # Recebe um id, busca ele na lista e devolve o objeto e o indice
-        if not len(self.colecao):
-            raise ErroEntradaVazia
-        try:
-            index = [x.identificador for x in self.colecao].index(id)
-        except ValueError:
-            raise ErroNaoEncontrado
-        objeto = self.colecao[index]
-        return (objeto, index)
+        # if not len(self.colecao):
+        #     raise ErroEntradaVazia
+        # try:
+        #     index = [x.identificador for x in self.colecao].index(id)
+        # except ValueError:
+        #     raise ErroNaoEncontrado
+        # objeto = self.colecao[index]
+        # return (objeto, index)
 
 # if __name__ == '__main__':
     # ControladorRestaurante()
