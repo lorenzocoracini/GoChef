@@ -20,7 +20,7 @@ class TelaUsuario:
             if event == sg.WIN_CLOSED or event == 'Voltar':
                 break
             if event == 'Confirmar':
-                self.__window.Close()
+                self.fechar_tela()
                 return values
             
     def login(self):
@@ -41,6 +41,10 @@ class TelaUsuario:
                 break
             if event == 'Confirmar':
                 return values
+            
+                
+    def fechar_tela(self):
+        self.__window.Close()
             
     def mostra_mensagem(self, mensagem: str):
         sg.popup(mensagem)

@@ -51,17 +51,18 @@ class ControladorUsuario:
     self.__salvar_senha(False, dados['input_senha_funcionario'])
 
   def login(self):
-    dados = self.__tela.login()
+    while True:
+      dados = self.__tela.login()
 
-    gerente = dados["gerente"]
-    
-    resultado = self.__checar_senha(gerente, dados['input_senha'])
+      gerente = dados["gerente"]
+      
+      resultado = self.__checar_senha(gerente, dados['input_senha'])
 
-    if resultado:
-      return gerente
-    else:
-      self.__tela.mostra_mensagem('Tipo de usuário ou senha incorretos')
-      return self.__tela.cadastro_senhas()
+      if resultado:
+        return gerente
+      else:
+        self.__tela.mostra_mensagem('Senha incorreta')
+        self.__tela.fechar_tela()
     
   def editar(self, id, dados: dict):
     try:
