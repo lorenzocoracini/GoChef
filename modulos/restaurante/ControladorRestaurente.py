@@ -1,8 +1,5 @@
 import random
 
-# from erros.ErroEntradaVazia import ErroEntradaVazia
-# from erros.ErroNaoEncontrado import ErroNaoEncontrado
-
 from modulos.restaurante.EntidadeRestaurante import Restaurante
 from modulos.restaurante.TelaRestaurante import TelaRestaurante
 from modulos.restaurante.cidade.EntidadeCidadeTeleEntrega import CidadeTeleEntrega
