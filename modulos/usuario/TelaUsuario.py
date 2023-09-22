@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 
+
 class TelaUsuario:
     def __init__(self):
         self.__window = None
@@ -8,8 +9,10 @@ class TelaUsuario:
         sg.ChangeLookAndFeel('Material2')
         layout = [
             [sg.Text("Cadastro de Senhas")],
-            [sg.Text("Senha gerente", size=(15, 1)), sg.InputText(key='input_senha_gerente')],
-            [sg.Text("Senha funcionário", size=(15, 1)), sg.InputText(key='input_senha_funcionario')],
+            [sg.Text("Senha gerente", size=(15, 1)),
+             sg.InputText(key='input_senha_gerente')],
+            [sg.Text("Senha funcionário", size=(15, 1)),
+             sg.InputText(key='input_senha_funcionario')],
             [sg.Button('Voltar'), sg.Button('Confirmar')]
         ]
 
@@ -22,7 +25,7 @@ class TelaUsuario:
             if event == 'Confirmar':
                 self.fechar_tela()
                 return values
-            
+
     def login(self):
         sg.ChangeLookAndFeel('Material2')
         layout = [
@@ -40,12 +43,11 @@ class TelaUsuario:
             if event == sg.WIN_CLOSED or event == 'Voltar':
                 return self.fechar_tela()
             if event == 'Confirmar':
+                self.fechar_tela()
                 return values
-            
-                
+
     def fechar_tela(self):
         self.__window.Close()
-            
+
     def mostra_mensagem(self, mensagem: str):
         sg.popup(mensagem)
-       

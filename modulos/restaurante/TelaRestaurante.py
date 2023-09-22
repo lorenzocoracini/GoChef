@@ -42,22 +42,29 @@ class TelaRestaurante:
                 raise ValueError(erro + f' no campo {nome_campo}.')
             raise ValueError(erro + '.')
 
-    def mostra_opcoes(self, nome_tela: str):
+    def mostra_opcoes(self, nome_tela: str, capacidade_maxima_cadastrada=None, cidades_cadastradas=[]):
+        index = 0
+        column = []
+        if len(cidades_cadastradas) > 0:
+            for cidade_cadastrada in cidades_cadastradas:
+                column.append([sg.Text(f'- {cidade_cadastrada}', key=f'nova_cidade {cidade_cadastrada} {index}'), sg.Button(
+                    'Remover cidade', key=f'remove_cidade {cidade_cadastrada} {index}')])
+                index += 1
+
         layout = [
             [sg.Text('Tela Inicial')],
             [sg.Text('Capacidade máxima de pessoas', size=(15, 1)),
-             sg.InputText(key='capacidade_maxima')],
+             sg.InputText(key='capacidade_maxima', default_text=capacidade_maxima_cadastrada)],
             [sg.Text('Cidade permitidas', size=(15, 1)),
              sg.InputText(key='cidade', do_not_clear=False),
              sg.Button('Adicionar cidade')],
-            [sg.Column([], key='cidades_section')],
+            [sg.Column(column, key='cidades_section')],
             [sg.Button('Confirmar')]
         ]
 
         self.__window = sg.Window(nome_tela).Layout(layout)
         botao, valores = self.abre()
-        cidades = []
-        index = 0
+        cidades = [*cidades_cadastradas]
         while True:
             try:
                 if botao == 'Adicionar cidade':
