@@ -33,7 +33,8 @@ class ControladorRestaurante:
         if dados_cidades is None:
             raise Exception
 
-        cidades = [CidadeTeleEntrega(cidade) for cidade in dados_cidades]
+        cidades = [CidadeTeleEntrega(cidade['nome'])
+                   for cidade in dados_cidades]
         self.__restaurante.cidades = cidades
 
     def cadastrar_dados_iniciais(self):
@@ -52,6 +53,19 @@ class ControladorRestaurante:
 
     def abre_tela():
         pass
+
+    def atualizar_dados(self):
+        capacidade_maxima_cadastrada = self.__restaurante.capacidade_maxima
+        cidades_cadastradas = [
+            cidade.nome for cidade in self.__restaurante.cidades]
+        dados = self.__tela.mostra_opcoes(
+            'Atualização de dados do restaurante', capacidade_maxima_cadastrada, cidades_cadastradas)
+        self.__restaurante.capacidade_maxima = dados['capacidades_maxima']
+        self.__restaurante.atualizar()
+        # pegar cidades novas -> adicionar
+        # pegar cidades excluidas -> remover
+        # cidades que ficaram -> nao fazer nada
+
 
 #   def editar(self, id, dados: dict, turnos: list):
 #     try:

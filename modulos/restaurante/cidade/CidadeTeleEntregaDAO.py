@@ -8,20 +8,6 @@ class CidadeTeleEntregaDAO(DAO):
     def __init__(self) -> None:
         super().__init__('CidadeTeleEntrega', 'nome')
 
-    # def criar(self):
-    #     try:
-    #         with self.conexao:
-    #             self.cursor.execute(f"""
-    #       CREATE TABLE IF NOT EXISTS {self.nomeTabela}
-    #         (
-    #           nome TEXT PRIMARY KEY,
-    #           restaurante_id INTEGER NOT NULL,
-    #           FOREIGN KEY (restaurante_id) REFERENCES Restaurante (id) ON DELETE CASCADE)
-    #     """)
-    #         return True
-    #     except Exception:
-    #         raise
-
     def guardar(self, restaurante_id: int):
         chaves = f"({','.join([*self.atributos.keys(), 'restaurante_id'])})"
         valores = tuple([v.identificador if isinstance(

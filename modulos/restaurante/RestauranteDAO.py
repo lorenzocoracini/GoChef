@@ -41,6 +41,20 @@ class RestauranteDAO(DAO):
         except Exception:
             raise
 
+    def atualizar(self):
+        set_statement = ', '.join([f"{k} = '{v}'" for k, v in self.atributos.items(
+        ) if not isinstance(v, DAO) and v is not None and k != 'cidades'])
+        try:
+            with self.conexao:
+                self.cursor.execute(f"""
+        UPDATE {self.nomeTabela} 
+        SET {set_statement}
+        WHERE {self.coluna_id} = '{self.identificador}'
+        """)
+                return True
+        except Exception:
+            raise
+
     @staticmethod
     def buscar() -> list:
         try:
