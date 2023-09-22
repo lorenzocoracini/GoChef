@@ -28,7 +28,10 @@ class ControladorSistema:
 
     def inicializa_sistema(self):
         self.__criar_usuarios()
-        self.__controlador_restaurante.cadastrar_dados_iniciais()
+        try:
+            self.__controlador_restaurante.carrega_dados_restaurante()
+        except:
+            self.__controlador_restaurante.cadastrar_dados_iniciais()
         self.__controlador_usuario.cadastrar_senha()
         eh_gerente = self.__controlador_usuario.login()
         self.abre_menu_principal()

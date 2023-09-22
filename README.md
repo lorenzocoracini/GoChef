@@ -7,7 +7,7 @@ O GoChef é uma solução abrangente para aprimorar a gestão de restaurantes, s
 - [ ] tirar voltar das telas iniciais
 - [ ] tratar quando o usuário clica 'X' do viewport
 - [ ] arrumar bug cidades com mais de uma palavra (ex.: São José, Nova Erechim, ...)
-- [ ] adicionar menu principal do sistema
-- [ ] adicionar funcionalidade para editar as informações do restaurante
+- [x] adicionar menu principal do sistema
+- [x] adicionar funcionalidade para editar as informações do restaurante
 - [ ] adiciona fluxo autenticação
 - [ ] adiciona tela abstrata

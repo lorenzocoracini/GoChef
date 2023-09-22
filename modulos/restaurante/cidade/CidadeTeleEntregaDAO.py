@@ -1,5 +1,4 @@
 from abstrato.DAO import DAO
-# from erros.ErroEntradaVazia import ErroEntradaVazia
 
 
 class CidadeTeleEntregaDAO(DAO):

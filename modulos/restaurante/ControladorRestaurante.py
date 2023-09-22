@@ -7,11 +7,13 @@ class ControladorRestaurante:
     def __init__(self):
         self.__tela = TelaRestaurante()
         self.__restaurante = None
+
+    def carrega_dados_restaurante(self):
         try:
             self.carregar_dados_restaurante()
             self.carregar_dados_cidades()
         except:
-            pass
+            raise
 
     @property
     def restaurante(self):
@@ -51,69 +53,31 @@ class ControladorRestaurante:
             nova_cidade = CidadeTeleEntrega(cidade)
             nova_cidade.guardar(restaurante_id)
 
-    def abre_tela():
-        pass
+    def atualizar_dados_restaurante(self, capacidade_maxima: int):
+        self.__restaurante.capacidade_maxima = capacidade_maxima
+        self.__restaurante.atualizar()
+
+    def atualizar_cidades(self, novas_cidades):
+        cidades_obj = []
+        restaurante_id = self.__restaurante.identificador
+        for nova_cidade in novas_cidades:
+            obj = CidadeTeleEntrega(nova_cidade)
+            if obj not in self.__restaurante.cidades:
+                obj.guardar(restaurante_id)
+                cidades_obj.append(obj)
+            else:
+                cidades_obj.append(obj)
+
+        for cidade_antiga in self.__restaurante.cidades:
+            if cidade_antiga not in cidades_obj:
+                cidade_antiga.remover()
+
+        self.__restaurante.cidades = cidades_obj
 
     def atualizar_dados(self):
         capacidade_maxima_cadastrada = self.__restaurante.capacidade_maxima
-        cidades_cadastradas = [
-            cidade.nome for cidade in self.__restaurante.cidades]
         dados = self.__tela.mostra_opcoes(
-            'Atualização de dados do restaurante', capacidade_maxima_cadastrada, cidades_cadastradas)
-        self.__restaurante.capacidade_maxima = dados['capacidades_maxima']
-        self.__restaurante.atualizar()
-        # pegar cidades novas -> adicionar
-        # pegar cidades excluidas -> remover
-        # cidades que ficaram -> nao fazer nada
-
-
-#   def editar(self, id, dados: dict, turnos: list):
-#     try:
-#       [objeto, _] = self.buscar_por_id(id)
-#       for chave, valor in dados.items():
-#         setattr(objeto, chave, valor)
-#       objeto.atualizar()
-#       for turno in turnos:
-#         turno_editado = Turno(**turno)
-#         turno_editado.atualizar()
-#     except (ErroEntradaVazia, ErroNaoEncontrado):
-#       raise
-#     except:
-#       raise ValueError
-
-    # def deletar(self, id):
-        # try:
-        #     [objeto, _] = self.buscar_por_id(id)
-        #     objeto.remover()
-        #     self.carregar_dados()
-        # except ErroNaoEncontrado:
-        #     raise ErroNaoEncontrado
-        # except:
-        #     raise ValueError
-
-    # def cadastrar_turno(self, identificador, turnos):
-        # for turno in turnos:
-        #     turno["professor"] = identificador
-        #     turno["id"] = random.randint(1000, 9999)
-        #     novo_turno = Turno(**turno)
-        #     novo_turno.guardar()
-        #     self.carregar_dados()
-
-    # def deletar_turno(self, id):
-        # try:
-        #     turno = Turno('', '', 0, 0, id)
-        #     turno.remover()
-        #     self.carregar_dados()
-        # except:
-        #     raise ValueError
-
-    # def buscar_por_id(self, id):
-        # Recebe um id, busca ele na lista e devolve o objeto e o indice
-        # if not len(self.colecao):
-        #     raise ErroEntradaVazia
-        # try:
-        #     index = [x.identificador for x in self.colecao].index(id)
-        # except ValueError:
-        #     raise ErroNaoEncontrado
-        # objeto = self.colecao[index]
-        # return (objeto, index)
+            'Atualização de dados do restaurante', capacidade_maxima_cadastrada, [
+                cidade.nome for cidade in self.__restaurante.cidades])
+        self.atualizar_dados_restaurante(dados['capacidade_maxima'])
+        self.atualizar_cidades(dados['cidades'])
