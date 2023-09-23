@@ -44,7 +44,7 @@ class TelaRestaurante:
 
     def mostra_opcoes(self, capacidade_maxima_cadastrada=None, cidades_cadastradas=[]):
         eh_tela_cadastro = capacidade_maxima_cadastrada is None and len(
-            cidades_cadastradas == 0)
+            cidades_cadastradas) == 0
         index = 0
         column = []
         if not eh_tela_cadastro:

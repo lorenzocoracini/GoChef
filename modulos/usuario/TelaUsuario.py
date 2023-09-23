@@ -47,12 +47,16 @@ class TelaUsuario:
             event, values = self.__window.read()
             if event == sg.WIN_CLOSED:
                 exit(0)
+
             if event == 'Voltar':
                 self.fechar_tela()
                 return {
                     'voltar': True
                 }
-            if event == 'Confirmar':
+
+            if event == 'Confirmar' and (not values['senha_atual'] or not values['senha_nova']):
+                self.mostra_mensagem('Por favor, digite as senhas!')
+            else:
                 self.fechar_tela()
                 return {
                     'senha_atual': values['senha_atual'],
