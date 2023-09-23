@@ -42,14 +42,21 @@ class TelaRestaurante:
                 raise ValueError(erro + f' no campo {nome_campo}.')
             raise ValueError(erro + '.')
 
-    def mostra_opcoes(self, nome_tela: str, capacidade_maxima_cadastrada=None, cidades_cadastradas=[]):
+    def mostra_opcoes(self, capacidade_maxima_cadastrada=None, cidades_cadastradas=[]):
+        eh_tela_cadastro = capacidade_maxima_cadastrada is None and len(
+            cidades_cadastradas == 0)
         index = 0
         column = []
-        if len(cidades_cadastradas) > 0:
+        if not eh_tela_cadastro:
+            botoes = [sg.Button('Voltar'), sg.Button('Confirmar')]
+            nome_tela = 'Atualização de dados do restaurante'
             for cidade_cadastrada in cidades_cadastradas:
                 column.append([sg.Text(f'- {cidade_cadastrada}', key=f'nova_cidade {cidade_cadastrada} {index}'), sg.Button(
                     'Remover cidade', key=f'remove_cidade {cidade_cadastrada} {index}')])
                 index += 1
+        else:
+            botoes = [sg.Button('Confirmar')]
+            nome_tela = 'Informações do Restaurante'
 
         layout = [
             [sg.Text('Tela Inicial')],
@@ -59,7 +66,7 @@ class TelaRestaurante:
              sg.InputText(key='cidade', do_not_clear=False),
              sg.Button('Adicionar cidade')],
             [sg.Column(column, key='cidades_section')],
-            [sg.Button('Confirmar')]
+            botoes
         ]
 
         self.__window = sg.Window(nome_tela).Layout(layout)
@@ -94,6 +101,12 @@ class TelaRestaurante:
                     self.__window.refresh()
                     botao, valores = self.abre()
                     continue
+
+                if botao == 'Voltar':
+                    self.fecha()
+                    return {
+                        'voltar': True
+                    }
 
                 if botao == 'Confirmar':
                     if len(cidades) == 0:

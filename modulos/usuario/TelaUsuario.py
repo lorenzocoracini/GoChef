@@ -45,8 +45,13 @@ class TelaUsuario:
 
         while True:
             event, values = self.__window.read()
-            if event == sg.WIN_CLOSED or event == 'Voltar':
-                return self.fechar_tela()
+            if event == sg.WIN_CLOSED:
+                exit(0)
+            if event == 'Voltar':
+                self.fechar_tela()
+                return {
+                    'voltar': True
+                }
             if event == 'Confirmar':
                 self.fechar_tela()
                 return {

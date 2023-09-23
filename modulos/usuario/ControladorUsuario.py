@@ -7,7 +7,8 @@ from modulos.usuario.TelaUsuario import TelaUsuario
 
 
 class ControladorUsuario:
-    def __init__(self):
+    def __init__(self, controlador_sistema):
+        self.__controlador_sistema = controlador_sistema
         self.__usuarios = []
         self.__tela = TelaUsuario()
         try:
@@ -68,12 +69,16 @@ class ControladorUsuario:
 
     def atualizar_senhas(self):
         dados = self.__tela.atualizacao_senhas()
+        if 'voltar' in dados:
+            return self.__controlador_sistema.abre_menu_principal_gerente()
+
         gerente = dados['gerente']
         senha_atual = dados['senha_atual']
         senha_nova = dados['senha_nova']
+
         if not self.__checar_senha(gerente, senha_atual):
             self.__tela.mostra_mensagem('Senha atual incorreta')
-            return self.__tela.fechar_tela()
+            return self.atualizar_senhas()
 
         self.__salvar_senha(gerente, senha_nova)
 

@@ -43,10 +43,13 @@ class TelaSistema:
 
         self.__window = sg.Window('Go Chef').Layout(layout)
         botao, valores = self.abre()
-        if botao in (None, 'Encerrar'):
-            self.fecha()
-            return 0
-        for chave in valores:
-            if valores[chave]:
+        while True:
+            if botao in (None, 'Encerrar'):
                 self.fecha()
-                return int(chave)
+                return 0
+            for chave in valores:
+                if valores[chave]:
+                    self.fecha()
+                    return int(chave)
+            self.mostra_mensagem_erro('Por favor, selecione um opção!')
+            botao, valores = self.abre()

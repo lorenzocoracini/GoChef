@@ -7,8 +7,8 @@ from modulos.sistema.TelaSistema import TelaSistema
 class ControladorSistema:
     def __init__(self):
         self.__tela = TelaSistema()
-        self.__controlador_usuario = ControladorUsuario()
-        self.__controlador_restaurante = ControladorRestaurante()
+        self.__controlador_usuario = ControladorUsuario(self)
+        self.__controlador_restaurante = ControladorRestaurante(self)
 
     def __criar_usuarios(self):
         try:
