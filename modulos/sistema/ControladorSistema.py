@@ -34,7 +34,10 @@ class ControladorSistema:
             self.__controlador_restaurante.cadastrar_dados_iniciais()
         self.__controlador_usuario.cadastrar_senha()
         eh_gerente = self.__controlador_usuario.login()
-        self.abre_menu_principal()
+        if eh_gerente:
+            self.abre_menu_principal_gerente()
+        else:
+            self.abre_menu_principal_funcionario()
 
         print(eh_gerente)
 
@@ -45,9 +48,9 @@ class ControladorSistema:
         self.__controlador_restaurante.atualizar_dados()
 
     def alterar_senhas_sistema(self):
-        pass
+        self.__controlador_usuario.atualizar_senhas()
 
-    def abre_menu_principal(self):
+    def abre_menu_principal_gerente(self):
         switcher = {
             1: self.alterar_dados_restaurante,
             2: self.alterar_senhas_sistema,
@@ -55,4 +58,12 @@ class ControladorSistema:
         }
 
         while True:
-            switcher[int(self.__tela.mostra_opcoes())]()
+            switcher[self.__tela.mostra_opcoes_gerente()]()
+
+    def abre_menu_principal_funcionario(self):
+        switcher = {
+            0: self.encerrar
+        }
+
+        while True:
+            switcher[self.__tela.mostra_opcoes_funcionario()]()

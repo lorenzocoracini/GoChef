@@ -64,6 +64,10 @@ class TelaRestaurante:
 
         self.__window = sg.Window(nome_tela).Layout(layout)
         botao, valores = self.abre()
+
+        if not botao:
+            exit(0)
+
         cidades = [*cidades_cadastradas]
         while True:
             try:

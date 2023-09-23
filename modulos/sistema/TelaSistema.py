@@ -15,7 +15,24 @@ class TelaSistema:
     def mostra_mensagem_erro(self, mensagem: str) -> None:
         sg.popup_error(mensagem)
 
-    def mostra_opcoes(self):
+    def mostra_opcoes_funcionario(self):
+        layout = [
+            [sg.Text('Menu Principal GoChef')],
+            [sg.Text('Ainda não existe nenhum UC implementado para funcionários!')],
+            [sg.Button('Encerrar')],
+        ]
+
+        self.__window = sg.Window('Go Chef').Layout(layout)
+        botao, valores = self.abre()
+        if botao in (None, 'Encerrar'):
+            self.fecha()
+            return 0
+        for chave in valores:
+            if valores[chave]:
+                self.fecha()
+                return int(chave)
+
+    def mostra_opcoes_gerente(self):
         layout = [
             [sg.Text('Menu Principal GoChef')],
             [sg.Text('Selecione uma opção')],
@@ -26,7 +43,7 @@ class TelaSistema:
 
         self.__window = sg.Window('Go Chef').Layout(layout)
         botao, valores = self.abre()
-        if botao in (None, 'Desligar'):
+        if botao in (None, 'Encerrar'):
             self.fecha()
             return 0
         for chave in valores:
