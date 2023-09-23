@@ -13,16 +13,19 @@ class TelaUsuario:
              sg.InputText(key='input_senha_gerente')],
             [sg.Text("Senha funcionário", size=(15, 1)),
              sg.InputText(key='input_senha_funcionario')],
-            [sg.Button('Voltar'), sg.Button('Confirmar')]
+            [sg.Button('Confirmar')]
         ]
 
         self.__window = sg.Window('GoChef').layout(layout)
 
         while True:
             event, values = self.__window.read()
-            if event == sg.WIN_CLOSED or event == 'Voltar':
-                return self.fechar_tela()
-            if event == 'Confirmar':
+            if event == sg.WIN_CLOSED:
+                exit(0)
+
+            if event == 'Confirmar' and (not values['input_senha_gerente'] or not values['input_senha_funcionario']):
+                self.mostra_mensagem('Por favor, digite as senhas!')
+            else:
                 self.fechar_tela()
                 return values
 
