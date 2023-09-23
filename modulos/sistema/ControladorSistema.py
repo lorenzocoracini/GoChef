@@ -1,7 +1,7 @@
 from modulos.usuario.ControladorUsuario import ControladorUsuario
 from modulos.usuario.EntidadeUsuario import Usuario
 from modulos.restaurante.ControladorRestaurante import ControladorRestaurante
-from modulos.sistema.TelasSistema import TelaSistema
+from modulos.sistema.TelaSistema import TelaSistema
 
 
 class ControladorSistema:
