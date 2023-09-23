@@ -4,7 +4,8 @@ from modulos.restaurante.cidade.EntidadeCidadeTeleEntrega import CidadeTeleEntre
 
 
 class ControladorRestaurante:
-    def __init__(self):
+    def __init__(self, controlador_sistema):
+        self.__controlador_sistema = controlador_sistema
         self.__tela = TelaRestaurante()
         self.__restaurante = None
 
@@ -40,7 +41,7 @@ class ControladorRestaurante:
         self.__restaurante.cidades = cidades
 
     def cadastrar_dados_iniciais(self):
-        dados = self.__tela.mostra_opcoes('Informações do Restaurante')
+        dados = self.__tela.mostra_opcoes()
         novo_restaurante = Restaurante(dados['capacidade_maxima'])
         novo_restaurante.guardar()
         self.carregar_dados_restaurante()
@@ -77,7 +78,11 @@ class ControladorRestaurante:
     def atualizar_dados(self):
         capacidade_maxima_cadastrada = self.__restaurante.capacidade_maxima
         dados = self.__tela.mostra_opcoes(
-            'Atualização de dados do restaurante', capacidade_maxima_cadastrada, [
+            capacidade_maxima_cadastrada, [
                 cidade.nome for cidade in self.__restaurante.cidades])
+
+        if 'voltar' in dados:
+            return self.__controlador_sistema.abre_menu_principal_gerente()
+
         self.atualizar_dados_restaurante(dados['capacidade_maxima'])
         self.atualizar_cidades(dados['cidades'])
