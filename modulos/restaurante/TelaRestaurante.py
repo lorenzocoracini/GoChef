@@ -82,7 +82,8 @@ class TelaRestaurante:
                     continue
 
                 if botao.startswith('remove_cidade'):
-                    _, cidade_a_ser_removida, ind = botao.split(' ')
+                    _, *cidade_a_ser_removida, ind = botao.split(' ')
+                    cidade_a_ser_removida = ' '.join(cidade_a_ser_removida)
                     self.__window[f'nova_cidade {cidade_a_ser_removida} {ind}'].hide_row(
                     )
                     cidades.remove(cidade_a_ser_removida)
