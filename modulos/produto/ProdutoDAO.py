@@ -21,7 +21,7 @@ class ProdutoDAO(DAO):
         except:
             raise
 
-    def buscar(self) -> list:
+    def buscar(self) -> list | None:
         try:
             res = self.cursor.execute(f'''
                 SELECT *
