@@ -53,6 +53,8 @@ class TelaProduto:
                     [
                         sg.Text(produto['nome'], key=produto['id']),
                         sg.Button(
+                        'Detalhes', key=f'detalhes {produto["id"]}'),
+                        sg.Button(
                         'Editar', key=f'editar {produto["id"]}'),
                         sg.Button(
                         'Excluir', key=f'excluir {produto["id"]}'),
@@ -84,6 +86,14 @@ class TelaProduto:
                     'adicionar': True
                 }
             
+            if 'detalhes' in botao:
+                self.fecha()
+                produto_id = botao.split()[1]
+                return {
+                    'ver_detalhes': True,
+                    'id': int(produto_id)
+                }
+            
             if 'editar' in botao:
                 self.fecha()
                 produto_id = botao.split()[1]
@@ -99,7 +109,26 @@ class TelaProduto:
                     'excluir': True,
                     'id': int(produto_id)
                 }
-            
+
+    def mostra_detalhes(self, nome: str, categoria: str, valor: float):
+        layout = [
+            [sg.Text(f'- Nome: {nome}')],
+            [sg.Text(f'- Categoria: {categoria}')],
+            [sg.Text(f'- Valor: R${valor:.2f}')],
+            [sg.Button('Voltar')]
+        ]
+
+        self.__window = sg.Window('Detalhes Produto').Layout(layout)
+        botao, valores = self.abre()
+
+        if not botao:
+            exit(0)
+
+        self.fecha()
+        if botao == 'Voltar':
+            return {
+                'voltar': True
+            }
     
     def confirma_exclusao_produto(self, categoria: str, nome: str):
         mensagem_confirmacao = f'''

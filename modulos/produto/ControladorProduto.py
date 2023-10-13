@@ -35,6 +35,16 @@ class ControladorProduto:
                 'valor': produto.valor
             } for produto in self.__produtos
         ]
+    
+    def mostra_detalhes(self, id: int):
+        produto_a_mostrar = self.pega_produto_por_id(id)
+        res = self.__tela_produto.mostra_detalhes(
+            produto_a_mostrar.nome,
+            CategoriaProduto(produto_a_mostrar.categoria).name.lower(),
+            produto_a_mostrar.valor
+        )
+        if 'voltar' in res:
+            return self.abre_menu_produto()
 
     def adiciona_produto(self):
         while True:
@@ -95,10 +105,13 @@ class ControladorProduto:
         if 'adicionar' in res:
             return self.adiciona_produto()
         
+        if 'ver_detalhes' in res:
+            return self.mostra_detalhes(res['id'])
+        
         if 'editar' in res:
             return self.edita_produto(res['id'])
         
-        if 'id' in res:
+        if 'excluir' in res:
             return self.exclui_produto(res['id'])
         
         if 'voltar' in res:
