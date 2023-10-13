@@ -83,6 +83,21 @@ class TelaProduto:
                 return {
                     'adicionar': True
                 }
+            
+            if 'editar' in botao:
+                produto_id = botao.split()[1]
+                return {
+                    'editar': True,
+                    'id': int(produto_id)
+                }
+           
+            if 'excluir' in botao:
+                produto_id = botao.split()[1]
+                return {
+                    'excluir': True,
+                    'id': int(produto_id)
+                }
+            
     
     def pega_dados_novo_produto(self):
         categorias_produto = [

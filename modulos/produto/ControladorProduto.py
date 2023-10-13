@@ -29,18 +29,25 @@ class ControladorProduto:
         ]
 
     def adiciona_produto(self):
-        try:
-            novo_produto = self.__tela_produto.pega_dados_novo_produto()
-
-            while 'voltar' not in novo_produto:
-                produto = Produto(**novo_produto)
-                produto.guardar()
-                self.carregar_dados_produtos()
+        while True:
+            try:
                 novo_produto = self.__tela_produto.pega_dados_novo_produto()
-            
-            self.abre_menu_produto()
-        except Exception as err:
-            self.__tela_produto.mostra_mensagem_erro(err)
+
+                while 'voltar' not in novo_produto:
+                    produto = Produto(**novo_produto)
+                    produto.guardar()
+                    self.carregar_dados_produtos()
+                    novo_produto = self.__tela_produto.pega_dados_novo_produto()
+                
+                return self.abre_menu_produto()
+            except Exception as err:
+                self.__tela_produto.mostra_mensagem_erro(err)
+
+    def edita_produto(self, id: int):
+        print('edita produto', id)
+
+    def exclui_produto(self, id: int):
+        print('exclui produto', id)
 
     def abre_menu_produto(self):
         produtos = self.pega_dados_produtos()
@@ -48,8 +55,12 @@ class ControladorProduto:
 
         if 'adicionar' in res:
             return self.adiciona_produto()
-
+        
+        if 'editar' in res:
+            return self.edita_produto(res['id'])
+        
+        if 'id' in res:
+            return self.exclui_produto(res['id'])
+        
         if 'voltar' in res:
             return self.__controlador_sistema.abre_menu_principal_gerente()
-        
-        print('still inside of abre_menu_produto')
