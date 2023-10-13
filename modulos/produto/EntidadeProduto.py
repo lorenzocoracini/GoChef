@@ -1,10 +1,11 @@
 from modulos.produto.ProdutoDAO import ProdutoDAO
 
-class EntidadeProduto(ProdutoDAO):
-    def __init__(self, nome: str, valor: float, id=None) -> None:
+class Produto(ProdutoDAO):
+    def __init__(self, nome: str, valor: float, categoria: int, id=None) -> None:
         super().__init__()
         self.__nome = nome
         self.__valor = valor
+        self.__categoria = categoria
         if id is not None:
             self.__id = id
         
@@ -19,6 +20,14 @@ class EntidadeProduto(ProdutoDAO):
     @nome.setter
     def nome(self, nome: str) -> None:
         self.__nome = nome
+
+    @property
+    def categoria(self) -> int:
+        return self.__categoria
+    
+    @categoria.setter
+    def categoria(self, categoria: int) -> None:
+        self.__categoria = categoria
     
     @property
     def valor(self) -> float:
@@ -27,7 +36,3 @@ class EntidadeProduto(ProdutoDAO):
     @valor.setter
     def valor(self, valor: float) -> None:
         self.__valor = valor
-
-    @staticmethod
-    def buscar() -> list | None:
-        return ProdutoDAO.buscar()

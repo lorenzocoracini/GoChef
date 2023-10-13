@@ -38,6 +38,7 @@ class TelaSistema:
             [sg.Text('Selecione uma opção')],
             [sg.Radio('Dados do restaurante', 'RD1', key='1')],
             [sg.Radio('Senhas do sistema', 'RD1', key='2')],
+            [sg.Radio('Produtos do Restaurante', 'RD1', key='3')],
             [sg.Button('Encerrar'), sg.Button('Confirmar')],
         ]
 
