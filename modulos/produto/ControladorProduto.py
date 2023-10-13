@@ -52,9 +52,29 @@ class ControladorProduto:
                 self.__tela_produto.mostra_mensagem_erro(err)
 
     def edita_produto(self, id: int):
-        print('edita produto', id)
         produto_a_editar = self.pega_produto_por_id(id)
+        while True:
+            try:
+                dados_editados = self.__tela_produto.pega_dados_produto(
+                    titulo_tela='Editar produto',
+                    nome=produto_a_editar.nome,
+                    valor=produto_a_editar.valor,
+                    categoria=produto_a_editar.categoria - 1,
+                )
 
+                if 'voltar' in dados_editados:
+                    return self.abre_menu_produto()
+        
+                produto_a_editar.atualizar(
+                    nome=dados_editados['nome'],
+                    valor=dados_editados['valor'],
+                    categoria=dados_editados['categoria'],
+                )
+                self.carregar_dados_produtos()
+                self.abre_menu_produto()
+
+            except Exception as err:
+                self.__tela_produto.mostra_mensagem_erro(err)
 
     def exclui_produto(self, id: int):
         produto_a_excluir = self.pega_produto_por_id(id)

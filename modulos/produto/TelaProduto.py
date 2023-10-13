@@ -85,6 +85,7 @@ class TelaProduto:
                 }
             
             if 'editar' in botao:
+                self.fecha()
                 produto_id = botao.split()[1]
                 return {
                     'editar': True,
@@ -141,7 +142,6 @@ class TelaProduto:
         ]
 
         layout = [
-            [sg.Text(valores_iniciais['titulo_tela'])],
             [sg.Text('Nome', size=(15, 1)),
              sg.InputText(key='nome', default_text=valores_iniciais['nome'])],
             [sg.Text('Valor', size=(15, 1)),
@@ -154,10 +154,14 @@ class TelaProduto:
                  readonly=True
                 )
             ],
-            [sg.Button('Voltar'), sg.Button('Adicionar')]
+            [sg.Button('Voltar'), sg.Button(
+                'Adicionar'
+                if valores_iniciais['titulo_tela'] == 'Adicionar produto'
+                else 'Editar'
+            )]
         ]
 
-        self.__window = sg.Window('Adicionar Produto').Layout(layout)
+        self.__window = sg.Window(valores_iniciais['titulo_tela']).Layout(layout)
         botao, valores = self.abre()
 
         while True:

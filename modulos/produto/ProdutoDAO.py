@@ -20,6 +20,19 @@ class ProdutoDAO(DAO):
         ''')
             return True
         
+    def atualizar(self, **kwargs):
+        set_statement = ', '.join([f"{k} = '{v}'" for k, v in kwargs.items()])
+        try:
+            with self.conexao:
+                self.cursor.execute(f"""
+          UPDATE {self.nomeTabela} 
+          SET {set_statement}
+          WHERE {self.coluna_id} = '{self.identificador}'
+        """)
+                return True
+        except Exception:
+            raise Exception('Esse produto já foi adicionado!')
+        
     def guardar(self):
         chaves = f"({','.join(self.atributos.keys())})"
         valores = tuple([v.identificador if isinstance(
