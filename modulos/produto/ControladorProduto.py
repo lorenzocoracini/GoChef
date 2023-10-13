@@ -1,5 +1,6 @@
 from modulos.produto.TelaProduto import TelaProduto
 from modulos.produto.EntidadeProduto import Produto
+from modulos.produto.CategoriaProduto import CategoriaProduto
 
 class ControladorProduto:
     def __init__(self, controlador_sistema) -> None:
@@ -47,7 +48,16 @@ class ControladorProduto:
         print('edita produto', id)
 
     def exclui_produto(self, id: int):
-        print('exclui produto', id)
+        produto_a_excluir = [produto for produto in self.__produtos if produto.identificador == id][0]
+        if not self.__tela_produto.confirma_exclusao_produto(
+            CategoriaProduto(produto_a_excluir.categoria).name.lower(),
+            produto_a_excluir.nome
+        ):
+            return self.abre_menu_produto()
+        
+        produto_a_excluir.remover()
+        self.carregar_dados_produtos()
+        self.abre_menu_produto()
 
     def abre_menu_produto(self):
         produtos = self.pega_dados_produtos()

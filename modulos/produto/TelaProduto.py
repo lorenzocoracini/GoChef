@@ -92,6 +92,7 @@ class TelaProduto:
                 }
            
             if 'excluir' in botao:
+                self.fecha()
                 produto_id = botao.split()[1]
                 return {
                     'excluir': True,
@@ -99,6 +100,26 @@ class TelaProduto:
                 }
             
     
+    def confirma_exclusao_produto(self, categoria: str, nome: str):
+        mensagem_confirmacao = f'''
+            Você tem certeza que deseja excluir a {categoria} {nome}?
+        '''
+        layout = [
+            [sg.Text(mensagem_confirmacao)],
+            [sg.Button('Não'), sg.Button('Sim')]
+        ]
+
+        self.__window = sg.Window('Remover Produto').Layout(layout)
+        botao, valores = self.abre()
+
+        if not botao:
+            exit(0)
+
+        self.fecha()
+        if botao == 'Não':
+            return False
+        return True
+
     def pega_dados_novo_produto(self):
         categorias_produto = [
             categoria.name.capitalize() for categoria in CategoriaProduto
@@ -124,11 +145,11 @@ class TelaProduto:
         self.__window = sg.Window('Adicionar Produto').Layout(layout)
         botao, valores = self.abre()
 
-        if not botao:
-            exit(0)
-
         while True:
             try:
+                if not botao:
+                    exit(0)
+
                 if botao == 'Voltar':
                     self.fecha()
                     return {
