@@ -2,6 +2,7 @@ from modulos.usuario.ControladorUsuario import ControladorUsuario
 from modulos.usuario.EntidadeUsuario import Usuario
 from modulos.restaurante.ControladorRestaurante import ControladorRestaurante
 from modulos.sistema.TelaSistema import TelaSistema
+from modulos.produto.ControladorProduto import ControladorProduto
 
 
 class ControladorSistema:
@@ -9,6 +10,7 @@ class ControladorSistema:
         self.__tela = TelaSistema()
         self.__controlador_usuario = ControladorUsuario(self)
         self.__controlador_restaurante = ControladorRestaurante(self)
+        self.__controlador_produto = ControladorProduto(self)
 
     def __criar_usuarios(self):
         try:
@@ -50,10 +52,14 @@ class ControladorSistema:
     def alterar_senhas_sistema(self):
         self.__controlador_usuario.atualizar_senhas()
 
+    def cadastrar_produtos(self):
+        self.__controlador_produto.abre_menu_produto()
+
     def abre_menu_principal_gerente(self):
         switcher = {
             1: self.alterar_dados_restaurante,
             2: self.alterar_senhas_sistema,
+            3: self.cadastrar_produtos,
             0: self.encerrar
         }
 
