@@ -26,10 +26,6 @@ class ProdutoDAO(DAO):
             v, DAO) else v for v in self.atributos.values()])
         parametros = '('+','.join('?' for _ in valores)+')'
 
-        print('nome da tabela =', self.nomeTabela)
-        print('chaves', chaves)
-        print('parametros', self.atributos)
-
         try:
             with self.conexao:
                 self.cursor.execute(f"""
