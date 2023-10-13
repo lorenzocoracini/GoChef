@@ -20,6 +20,13 @@ class ControladorProduto:
             for produto in dados_produtos
         ]
 
+    def pega_produto_por_id(self, id: int) -> Produto:
+        return [
+            produto 
+            for produto in self.__produtos 
+            if produto.identificador == id
+        ][0]
+
     def pega_dados_produtos(self):
         return [
             {
@@ -32,13 +39,13 @@ class ControladorProduto:
     def adiciona_produto(self):
         while True:
             try:
-                novo_produto = self.__tela_produto.pega_dados_novo_produto()
+                novo_produto = self.__tela_produto.pega_dados_produto()
 
                 while 'voltar' not in novo_produto:
                     produto = Produto(**novo_produto)
                     produto.guardar()
                     self.carregar_dados_produtos()
-                    novo_produto = self.__tela_produto.pega_dados_novo_produto()
+                    novo_produto = self.__tela_produto.pega_dados_produto()
                 
                 return self.abre_menu_produto()
             except Exception as err:
@@ -46,9 +53,11 @@ class ControladorProduto:
 
     def edita_produto(self, id: int):
         print('edita produto', id)
+        produto_a_editar = self.pega_produto_por_id(id)
+
 
     def exclui_produto(self, id: int):
-        produto_a_excluir = [produto for produto in self.__produtos if produto.identificador == id][0]
+        produto_a_excluir = self.pega_produto_por_id(id)
         if not self.__tela_produto.confirma_exclusao_produto(
             CategoriaProduto(produto_a_excluir.categoria).name.lower(),
             produto_a_excluir.nome

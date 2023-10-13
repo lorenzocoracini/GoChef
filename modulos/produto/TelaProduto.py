@@ -119,22 +119,37 @@ class TelaProduto:
         if botao == 'Não':
             return False
         return True
+    
+    def pega_valores_default_adiciona_produto(self):
+        return {
+            'titulo_tela': 'Adicionar produto',
+            'nome': '',
+            'valor': '',
+            'categoria': 0
+        }
 
-    def pega_dados_novo_produto(self):
+    def pega_dados_produto(self, **kwargs):
+        valores_iniciais = None
+
+        if len(kwargs) == 0:
+            valores_iniciais = self.pega_valores_default_adiciona_produto()
+        else:
+            valores_iniciais = kwargs
+        
         categorias_produto = [
             categoria.name.capitalize() for categoria in CategoriaProduto
         ]
 
         layout = [
-            [sg.Text('Adicionar produto')],
+            [sg.Text(valores_iniciais['titulo_tela'])],
             [sg.Text('Nome', size=(15, 1)),
-             sg.InputText(key='nome', default_text='')],
+             sg.InputText(key='nome', default_text=valores_iniciais['nome'])],
             [sg.Text('Valor', size=(15, 1)),
-             sg.InputText(key='valor')],
+             sg.InputText(key='valor', default_text=valores_iniciais['valor'])],
             [sg.Text('Categoria', size=(15, 1)),
              sg.Combo(
                  categorias_produto, 
-                 default_value=categorias_produto[0], 
+                 default_value=categorias_produto[valores_iniciais['categoria']], 
                  key='categoria', 
                  readonly=True
                 )
