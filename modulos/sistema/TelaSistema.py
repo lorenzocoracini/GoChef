@@ -18,8 +18,9 @@ class TelaSistema:
     def mostra_opcoes_funcionario(self):
         layout = [
             [sg.Text('Menu Principal GoChef')],
-            [sg.Text('Ainda não existe nenhum UC implementado para funcionários!')],
-            [sg.Button('Encerrar')],
+            [sg.Text('Selecione uma opção')],
+            [sg.Radio('Controle das Mesas', 'RD1', key='1')],
+            [sg.Button('Encerrar'), sg.Button('Confirmar')],
         ]
 
         self.__window = sg.Window('Go Chef').Layout(layout)
@@ -31,6 +32,8 @@ class TelaSistema:
             if valores[chave]:
                 self.fecha()
                 return int(chave)
+        self.mostra_mensagem_erro('Por favor, selecione um opção!')
+        botao, valores = self.abre()
 
     def mostra_opcoes_gerente(self):
         layout = [
@@ -39,6 +42,7 @@ class TelaSistema:
             [sg.Radio('Dados do restaurante', 'RD1', key='1')],
             [sg.Radio('Senhas do sistema', 'RD1', key='2')],
             [sg.Radio('Produtos do Restaurante', 'RD1', key='3')],
+            [sg.Radio('Controle das Mesas', 'RD1', key='4')],
             [sg.Button('Encerrar'), sg.Button('Confirmar')],
         ]
 
