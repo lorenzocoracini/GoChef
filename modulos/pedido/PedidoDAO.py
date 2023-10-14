@@ -1,25 +1,22 @@
 from abstrato.DAO import DAO
 
 
-class ProdutoDAO(DAO):
-    nome_tabela = 'Produto'
+class PedidoDAO(DAO):
+    nome_tabela = 'Pedido'
 
     def __init__(self) -> None:
-        super().__init__('Produto', 'id')
+        super().__init__('Pedido', 'id')
 
+    # analisar a tabela PedidoProdutoPedido
     def criar(self):
         with self.conexao:
             self.cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS {self.nome_tabela} (
                 id        INTEGER PRIMARY KEY,
-                nome      TEXT,
-                valor     FLOAT,
-                categoria INTEGER,
-                UNIQUE(nome, categoria)
             )
         ''')
             return True
-        
+
     def atualizar(self, **kwargs):
         set_statement = ', '.join([f"{k} = '{v}'" for k, v in kwargs.items()])
         try:
@@ -32,12 +29,12 @@ class ProdutoDAO(DAO):
                 return True
         except Exception:
             raise Exception('Esse produto já foi adicionado!')
-        
+
     def guardar(self):
         chaves = f"({','.join(self.atributos.keys())})"
         valores = tuple([v.identificador if isinstance(
             v, DAO) else v for v in self.atributos.values()])
-        parametros = '('+','.join('?' for _ in valores)+')'
+        parametros = '(' + ','.join('?' for _ in valores) + ')'
 
         try:
             with self.conexao:
@@ -53,9 +50,9 @@ class ProdutoDAO(DAO):
     @staticmethod
     def buscar() -> list:
         try:
-            res = ProdutoDAO.cursor.execute(f'''
+            res = PedidoDAO.cursor.execute(f'''
                 SELECT *
-                FROM {ProdutoDAO.nome_tabela}
+                FROM {PedidoDAO.nome_tabela}
             ''')
             return [dict(row) for row in res.fetchall()]
         except:
