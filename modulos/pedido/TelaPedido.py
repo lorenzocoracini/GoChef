@@ -2,18 +2,31 @@ import PySimpleGUI as sg
 
 
 class TelaPedido:
-    def __init__(self, lista_de_produtos):
+    def __init__(self):
         sg.ChangeLookAndFeel('Material2')
         self.__window = None
-        self.lista_de_produtos = lista_de_produtos
-        self.pedido = {}
+        self.pedido = []
+        self.produtos = []
 
-    def mostrar_interface(self):
+    def atualiza_resumo_do_pedido(self):
+        total_pedido = sum(item['quantidade'] * item['valor'] for item in self.pedido)
+        pedido_text = ''
+        for item in self.pedido:
+            total_item = item['quantidade'] * item['valor']
+            pedido_text += f"{item['nome']} (ID: {item['id']}, {item['quantidade']}x R${item['valor']:.2f}) - Total: R${total_item:.2f}\n"
+        pedido_text += f'Total do Pedido: R${total_pedido:.2f}'
+        self.__window['pedido_text'].update(pedido_text)
+
+    def criar_pedido(self, produtos):
+        self.produtos = produtos
         layout = [
             [sg.Text('Selecione o produto:')],
-            [sg.Listbox(self.lista_de_produtos, size=(30, 6), key='produto_list')],
+            [sg.Listbox(
+                [(f"{produto['nome']} (ID: {produto['id']}, R${produto['valor']:.2f})") for produto in produtos],
+                size=(30, 6), key='produto_list')],
             [sg.Text('Quantidade:'), sg.InputText(key='quantidade')],
-            [sg.Button('Adicionar ao Pedido'), sg.Button('Concluir Pedido')],
+            [sg.Button('Adicionar Quantia Do Produto ao Pedido'), sg.Button('Retirar Produto do Pedido'), sg.Button('Concluir Pedido'),
+             sg.Button('Voltar')],
             [sg.Text('Itens no Pedido:')],
             [sg.Multiline('', size=(40, 10), key='pedido_text', autoscroll=True)],
         ]
@@ -23,35 +36,75 @@ class TelaPedido:
         while True:
             event, values = self.__window.read()
 
-            if event in (sg.WIN_CLOSED, 'Concluir Pedido'):
+            if event in (sg.WIN_CLOSED, 'Concluir Pedido', 'Voltar'):
                 break
-            elif event == 'Adicionar ao Pedido':
-                produto_selecionado = values['produto_list'][0]
-                quantidade = values['quantidade']
 
-                if produto_selecionado and quantidade:
+            # Adiciona
+            elif event == 'Adicionar Quantia Do Produto ao Pedido':
+                quantidade = values['quantidade'].strip()
+
+                if not values['produto_list']:
+                    sg.popup("Selecione um produto antes de adicionar ao pedido.")
+                    continue
+                elif not quantidade:
+                    sg.popup("Digite a quantidade antes de adicionar ao pedido.")
+                    continue
+                elif not quantidade.isdigit() or int(quantidade) <= 0:
+                    sg.popup("A quantidade deve ser um número inteiro positivo.")
+                    continue
+                else:
                     quantidade = int(quantidade)
-                    if produto_selecionado in self.pedido:
-                        self.pedido[produto_selecionado] += quantidade
-                    else:
-                        self.pedido[produto_selecionado] = quantidade
-                    self.atualizar_resumo_do_pedido(self.__window)
+                    produto_selecionado_str = values['produto_list'][0]
+                    produto_selecionado = produto_selecionado_str.split(" (ID: ")[0]
 
+                existing_product = next((item for item in self.pedido if item['nome'] == produto_selecionado), None)
+
+                if existing_product:
+                    existing_product['quantidade'] += quantidade
+                else:
+                    for produto in self.produtos:
+                        if produto['nome'] == produto_selecionado:
+                            self.pedido.append({
+                                'id': produto['id'],
+                                'nome': produto['nome'],
+                                'quantidade': quantidade,
+                                'valor': produto['valor']
+                            })
+                self.atualiza_resumo_do_pedido()
+
+            # Retira
+            elif event == 'Retirar Produto do Pedido':
+                if not values['produto_list']:
+                    sg.popup("Selecione um item do pedido para remover.")
+                else:
+                    item_to_remove = values['produto_list'][0]
+                    item_to_remove_name = item_to_remove.split(" (ID: ")[0]
+                    self.pedido = [item for item in self.pedido if item['nome'] != item_to_remove_name]
+                    self.atualiza_resumo_do_pedido()
+
+        # Final
         self.__window.close()
-
-    def atualizar_resumo_do_pedido(self, window):
-        pedido_text = '\n'.join([f'{produto}: {quantidade}' for produto, quantidade in self.pedido.items()])
-        window['pedido_text'].update(pedido_text)
-
-    def obter_pedido(self):
-        return self.pedido
+        print(event)
+        print(self.pedido)
+        return self.pedido, event
 
 
 if __name__ == '__main__':
-    lista_de_produtos = ['Produto 1', 'Produto 2', 'Produto 3', 'Produto 4']
-    pedido = TelaPedido(lista_de_produtos)
-    pedido.mostrar_interface()
-    pedido_final = pedido.obter_pedido()
-    print('Pedido Final:')
-    for produto, quantidade in pedido_final.items():
-        print(f'{produto}: {quantidade}')
+    produtos = [
+        {
+            "nome": "produto 1",
+            "id": 1,
+            "valor": 10.00,
+        },
+        {
+            "nome": "produto 2",
+            "id": 2,
+            "valor": 20.00,
+        },
+        {
+            "nome": "produto 3",
+            "id": 3,
+            "valor": 30.00,
+        },
+    ]
+    pedido = TelaPedido().criar_pedido(produtos)

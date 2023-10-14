@@ -7,7 +7,6 @@ class PedidoDAO(DAO):
     def __init__(self) -> None:
         super().__init__('Pedido', 'id')
 
-    # analisar a tabela PedidoProdutoPedido
     def criar(self):
         with self.conexao:
             self.cursor.execute(f'''

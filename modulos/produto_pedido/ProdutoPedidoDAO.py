@@ -14,6 +14,7 @@ class ProdutoPedidoDAO(DAO):
                 id  INTEGER PRIMARY KEY,
                 produto_id  INTEGER,
                 quantidade  INTEGER,
+                pedido_id   INTEGER
                 UNIQUE(produto_id, quantidade)
             )
         ''')

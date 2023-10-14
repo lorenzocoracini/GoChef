@@ -2,10 +2,11 @@ from modulos.produto_pedido.ProdutoPedidoDAO import ProdutoPedidoDAO
 
 
 class ProdutoPedido(ProdutoPedidoDAO):
-    def __init__(self, produto_id: int, quantidade):
+    def __init__(self, produto_id: int, quantidade, pedido_id):
         ProdutoPedidoDAO.__init__(self)
-        self.__produto_id = produto_id  # Um id Produto
+        self.__produto_id = produto_id
         self.__quantidade = quantidade
+        self.__pedido_id = pedido_id
         if id is not None:
             self.__id = id
 
@@ -24,3 +25,7 @@ class ProdutoPedido(ProdutoPedidoDAO):
     @property
     def produto_id(self) -> int:
         return self.__produto_id
+
+    @property
+    def pedido_id(self) -> int:
+        return self.__pedido_id
