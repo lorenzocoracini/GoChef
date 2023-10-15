@@ -7,7 +7,7 @@ from functools import reduce
 
 
 class ControladorMesa:
-    def __init__(self, controlador_sistema, controlador_atendimento = None):
+    def __init__(self, controlador_sistema, controlador_atendimento=None):
         self.__controlador_sistema = controlador_sistema
         self.__controlador_atendimento = controlador_atendimento
         self.__mesas = []
@@ -25,8 +25,22 @@ class ControladorMesa:
     def colecao(self, colecao):
         self.__mesas = colecao
 
+    # def mesas_atendidas_e_nao_atendidas(self):
+    #     mesas_com_atendimeto = []
+    #     mesas_para_inicar_atendimento = []
+    #     for mesa in self.colecao:
+    #         if mesa.atendimentos != None:
+    #             for atendimento in mesa.atendimentos:
+    #                 if not atendimento.encerrado:
+    #                     mesas_com_atendimeto.append(mesa)
+    #                 else:
+    #                     mesas_para_inicar_atendimento.append(mesa)
+    #     print('--', mesas_com_atendimeto, '--', mesas_para_inicar_atendimento)
+    #     return mesas_com_atendimeto, mesas_para_inicar_atendimento
+
     def listar_mesas(self):
-        opcoes = self.__tela.lista_mesas(self.colecao, self.__controlador_sistema.usuario_atual_eh_gerente)
+        opcoes = self.__tela.lista_mesas(self.colecao,
+                                         self.__controlador_sistema.usuario_atual_eh_gerente)
         if 'adicionar' in opcoes:
             self.cadastrar_mesa()
 
@@ -54,13 +68,14 @@ class ControladorMesa:
             numero_mesa_cadastrado=mesa.numero_mesa,
             numero_lugares_cadastrado=mesa.numero_lugares
         )
-        
+
         if 'voltar' in dados: return
         self.__editar(id, dados)
 
     def __cadastrar(self, dados: dict):
         if self.__ultrapassa_capacidade_maxima(dados['numero_lugares'], self.colecao):
-            self.__tela.mostra_mensagem(f"O restaurante não tem capacidade suficiente para uma nova mesa com {dados['numero_lugares']} lugares")
+            self.__tela.mostra_mensagem(
+                f"O restaurante não tem capacidade suficiente para uma nova mesa com {dados['numero_lugares']} lugares")
             return
         try:
             nova_mesa = Mesa(**dados)
@@ -70,7 +85,7 @@ class ControladorMesa:
             self.__tela.mostra_mensagem("Já existe uma mesa com este número de mesa")
         except:
             raise ValueError
-        
+
     def __ultrapassa_capacidade_maxima(self, numero_lugares, mesas):
         total_numero_lugares = reduce(lambda a, b: a + b.numero_lugares, mesas, 0) + numero_lugares
         return total_numero_lugares > self.__controlador_sistema.lotacao_maxima_restaurante()
@@ -78,10 +93,12 @@ class ControladorMesa:
     def __editar(self, id, dados: dict):
         try:
             [objeto, _] = self.__buscar_por_id(id)
-            if self.__ultrapassa_capacidade_maxima(dados['numero_lugares'], list(filter(lambda mesa: mesa.id != id, self.colecao))):
-                self.__tela.mostra_mensagem(f"O restaurante não tem capacidade suficiente para uma mesa com {dados['numero_lugares']} lugares")
+            if self.__ultrapassa_capacidade_maxima(dados['numero_lugares'],
+                                                   list(filter(lambda mesa: mesa.id != id, self.colecao))):
+                self.__tela.mostra_mensagem(
+                    f"O restaurante não tem capacidade suficiente para uma mesa com {dados['numero_lugares']} lugares")
                 return
-            
+
             atributos_originais = objeto.atributos.items()
             for chave, valor in dados.items():
                 setattr(objeto, chave, valor)
@@ -94,12 +111,12 @@ class ControladorMesa:
                 if chave != 'id': setattr(objeto, chave, valor)
         except:
             raise ValueError
-    
+
     def __excluir(self, id):
         try:
-          [objeto, _] = self.__buscar_por_id(id)
-          if self.__tela.confirma_exclusao_mesa(objeto.numero_mesa):
-            objeto.remover()
+            [objeto, _] = self.__buscar_por_id(id)
+            if self.__tela.confirma_exclusao_mesa(objeto.numero_mesa):
+                objeto.remover()
         except (ErroEntradaVazia, ErroNaoEncontrado):
             raise
         except:

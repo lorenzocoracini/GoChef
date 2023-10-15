@@ -10,15 +10,16 @@ class TelaMesa:
         lista_de_mesas = []
         for mesa in mesas:
             lista_de_mesas.append(
-                [sg.Text(f'- Mesa {mesa.numero_mesa}'), 
+                [sg.Text(f'- Mesa {mesa.numero_mesa}'),
                  sg.Button('Iniciar atendimento', key=f"atendimento {mesa.id}"),
                  sg.Button('Editar', key=f"editar {mesa.id}", visible=eh_gerente),
                  sg.Button('Excluir', key=f"excluir {mesa.id}", visible=eh_gerente)
-                ])
+                 ])
 
         layout = [
             [sg.Text("Mesas")],
-            [sg.Column(lista_de_mesas,  key='mesas') if len(lista_de_mesas) > 0 else sg.Text("Não há mesas cadastradas")],
+            [sg.Column(lista_de_mesas, key='mesas') if len(lista_de_mesas) > 0 else sg.Text(
+                "Não há mesas cadastradas")],
             [sg.Button('Voltar'), sg.Button('Adicionar', visible=eh_gerente)]
         ]
 
@@ -31,32 +32,32 @@ class TelaMesa:
 
             if event == 'Voltar':
                 self.fechar_tela()
-                return { 'voltar': True }
+                return {'voltar': True}
 
             if event == 'Adicionar':
                 self.fechar_tela()
-                return { 'adicionar': True }
-            
+                return {'adicionar': True}
+
             if event.startswith('atendimento'):
                 mesa = event.split().pop()
                 self.fechar_tela()
-                return { 'atendimento': mesa }
-            
+                return {'atendimento': mesa}
+
             if event.startswith('editar'):
                 mesa = event.split().pop()
                 self.fechar_tela()
-                return { 'editar': mesa }
-            
+                return {'editar': mesa}
+
             if event.startswith('excluir'):
                 mesa = event.split().pop()
                 self.fechar_tela()
-                return { 'excluir': mesa }
-                
-                
+                return {'excluir': mesa}
+
+
             else:
                 self.fechar_tela()
 
-    def mostra_formulario(self, numero_mesa_cadastrado = None, numero_lugares_cadastrado = None):
+    def mostra_formulario(self, numero_mesa_cadastrado=None, numero_lugares_cadastrado=None):
         layout = [
             [sg.Text("Cadastro de Mesa")],
             [sg.Text("Numero da mesa", size=(15, 1)),
@@ -74,39 +75,40 @@ class TelaMesa:
                 exit(0)
 
             if event == 'Confirmar':
-                campos_validados = self.__validar_campos_mesa(values['input_numero_mesa'], values['input_numero_lugares'])
+                campos_validados = self.__validar_campos_mesa(values['input_numero_mesa'],
+                                                              values['input_numero_lugares'])
                 if (campos_validados):
                     self.fechar_tela()
                     return campos_validados
-            
+
             if event == 'Voltar':
                 self.fechar_tela()
-                return { 'voltar': True }
-            
+                return {'voltar': True}
+
             else:
                 self.fechar_tela()
-            
+
     def __validar_campos_mesa(self, numero_mesa: str, numero_lugares: str):
         if not numero_mesa or not numero_lugares:
             self.mostra_mensagem('Por favor, digite todos os campos!')
-        try: 
-          numero_mesa = int(numero_mesa)
-          if numero_mesa < 0:
-              raise ValueError
+        try:
+            numero_mesa = int(numero_mesa)
+            if numero_mesa < 0:
+                raise ValueError
         except ValueError:
             self.mostra_mensagem('O número da mesa deve ser um número inteiro positivo')
             return False
 
-        try: 
-          numero_lugares = int(numero_lugares)
-          if numero_lugares < 1:
-              raise ValueError
+        try:
+            numero_lugares = int(numero_lugares)
+            if numero_lugares < 1:
+                raise ValueError
         except ValueError:
             self.mostra_mensagem('O número da mesa deve ser um número inteiro positivo maior que 1')
             return False
-        
+
         return {'numero_mesa': numero_mesa, 'numero_lugares': numero_lugares}
-    
+
     def confirma_exclusao_mesa(self, numero_mesa: int):
         mensagem_confirmacao = f'''
             Você tem certeza que deseja excluir a Mesa {numero_mesa}?
@@ -124,7 +126,6 @@ class TelaMesa:
 
         self.fechar_tela()
         return botao == 'Sim'
-        
 
     def fechar_tela(self):
         self.__window.Close()

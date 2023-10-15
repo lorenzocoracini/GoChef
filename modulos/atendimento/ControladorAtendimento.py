@@ -3,11 +3,13 @@ from erros.ErroNaoEncontrado import ErroNaoEncontrado
 from modulos.atendimento.EntidadeAtendimento import Atendimento
 from modulos.atendimento.TelaAtendimento import TelaAtendimeno
 from modulos.mesa.EntidadeMesa import Mesa
+from modulos.pedido.ControladorPedido import ControladorPedido
 
 
 class ControladorAtendimento:
-    def __init__(self, controlador_sistema):
+    def __init__(self, controlador_sistema, controlador_pedido: ControladorPedido):
         self.__controlador_sistema = controlador_sistema
+        self.__controlador_pedido = controlador_pedido
         self.__atendimentos = []
         self.__tela = TelaAtendimeno()
         try:
@@ -24,7 +26,10 @@ class ControladorAtendimento:
         self.__atendimentos = colecao
 
     def detalhes_atendimento(self, mesa_id: int):
-        self.__tela.detalhes_atendimento()
+        detalhe = self.__tela.detalhes_atendimento()
+        if detalhe["adicionar_pedido"]:
+            produtos_pedido = self.__controlador_pedido.criar_pedido()
+            print(produtos_pedido)
 
     def __carregar_dados(self):
         # Busca todos os cadastros e popula a listagem
