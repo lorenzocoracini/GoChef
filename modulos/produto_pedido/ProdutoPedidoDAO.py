@@ -14,7 +14,7 @@ class ProdutoPedidoDAO(DAO):
                 id  INTEGER PRIMARY KEY,
                 produto_id  INTEGER,
                 quantidade  INTEGER,
-                pedido_id   INTEGER
+                pedido_id   INTEGER,
                 UNIQUE(produto_id, quantidade)
             )
         ''')
@@ -30,8 +30,9 @@ class ProdutoPedidoDAO(DAO):
           WHERE {self.coluna_id} = '{self.identificador}'
         """)
                 return True
-        except Exception:
-            raise Exception('Esse produto já foi adicionado!')
+        except Exception as err:
+            print(err)
+            raise Exception('Esse produto pedido já foi adicionado!')
 
     def guardar(self):
         chaves = f"({','.join(self.atributos.keys())})"

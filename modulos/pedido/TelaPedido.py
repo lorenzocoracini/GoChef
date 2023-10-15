@@ -84,27 +84,25 @@ class TelaPedido:
 
         # Final
         self.__window.close()
-        print(event)
-        print(self.pedido)
         return self.pedido, event
 
 
-if __name__ == '__main__':
-    produtos = [
-        {
-            "nome": "produto 1",
-            "id": 1,
-            "valor": 10.00,
-        },
-        {
-            "nome": "produto 2",
-            "id": 2,
-            "valor": 20.00,
-        },
-        {
-            "nome": "produto 3",
-            "id": 3,
-            "valor": 30.00,
-        },
-    ]
-    pedido = TelaPedido().criar_pedido(produtos)
+# if __name__ == '__main__':
+#     produtos = [
+#         {
+#             "nome": "produto 1",
+#             "id": 1,
+#             "valor": 10.00,
+#         },
+#         {
+#             "nome": "produto 2",
+#             "id": 2,
+#             "valor": 20.00,
+#         },
+#         {
+#             "nome": "produto 3",
+#             "id": 3,
+#             "valor": 30.00,
+#         },
+#     ]
+#     pedido = TelaPedido().criar_pedido(produtos)

@@ -5,7 +5,7 @@ from modulos.produto.ControladorProduto import ControladorProduto
 
 
 class ControladorPedido:
-    def __init__(self, controlador_sistema) -> None:
+    def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__tela = TelaPedido()
         self.__pedidos = []
@@ -16,7 +16,20 @@ class ControladorPedido:
 
     def criar_pedido(self):
         produtos = self.pega_produtos_cadastrados()
-        pedido = self.__tela.criar_pedido(produtos)
+        produtos_do_pedido, event = self.__tela.criar_pedido(produtos)
+
+        pedido_obj = Pedido()
+        pedido_obj.guardar()
+        pedido_id = pedido_obj.identificador
+        print(pedido_id)
+        for produto in produtos_do_pedido:
+            produto_id: int = produto['id']
+            quantidade: int = produto['quantidade']
+
+            produto_pedido = ProdutoPedido(produto_id, quantidade, pedido_id)
+            produto_pedido.guardar()
+
+        return produtos_do_pedido
 
     @property
     def pedidos(self):

@@ -11,7 +11,7 @@ class PedidoDAO(DAO):
         with self.conexao:
             self.cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS {self.nome_tabela} (
-                id        INTEGER PRIMARY KEY,
+                id  INTEGER PRIMARY KEY
             )
         ''')
             return True
@@ -27,32 +27,36 @@ class PedidoDAO(DAO):
         """)
                 return True
         except Exception:
-            raise Exception('Esse produto já foi adicionado!')
+            raise Exception('Esse pedido já foi adicionado!')
 
     def guardar(self):
-        chaves = f"({','.join(self.atributos.keys())})"
+        atributos = [
+            key for key in self.atributos.keys() if key != 'produtos_pedidos']
+        chaves = f"({','.join(atributos)})"
         valores = tuple([v.identificador if isinstance(
-            v, DAO) else v for v in self.atributos.values()])
+            v, DAO) else v for k, v in self.atributos.items() if k != 'produtos_pedidos'])
         parametros = '(' + ','.join('?' for _ in valores) + ')'
 
         try:
             with self.conexao:
-                self.cursor.execute(f"""
-          INSERT INTO {self.nomeTabela}
-          {chaves}
-          VALUES {parametros}
-        """, valores)
+                sql = f"""
+                       INSERT INTO {self.nomeTabela} {chaves}
+                       VALUES {parametros}
+                   """
+                self.cursor.execute(sql, valores)
                 return True
-        except:
-            raise Exception('Esse produto já foi adicionado!')
+        except Exception as err:
+            print("print-----", err)
+            print("Generated SQL:", sql)
+            raise Exception('Esse pedido já foi adicionado!')
 
     @staticmethod
     def buscar() -> list:
         try:
             res = PedidoDAO.cursor.execute(f'''
-                SELECT *
-                FROM {PedidoDAO.nome_tabela}
-            ''')
+                    SELECT *
+                    FROM {PedidoDAO.nome_tabela}
+                ''')
             return [dict(row) for row in res.fetchall()]
         except:
             return None

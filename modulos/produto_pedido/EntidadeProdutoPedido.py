@@ -2,7 +2,7 @@ from modulos.produto_pedido.ProdutoPedidoDAO import ProdutoPedidoDAO
 
 
 class ProdutoPedido(ProdutoPedidoDAO):
-    def __init__(self, produto_id: int, quantidade, pedido_id):
+    def __init__(self, produto_id: int, quantidade: int, pedido_id, id=None):
         ProdutoPedidoDAO.__init__(self)
         self.__produto_id = produto_id
         self.__quantidade = quantidade

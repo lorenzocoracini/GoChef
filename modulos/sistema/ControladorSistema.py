@@ -5,6 +5,7 @@ from modulos.usuario.EntidadeUsuario import Usuario
 from modulos.restaurante.ControladorRestaurante import ControladorRestaurante
 from modulos.sistema.TelaSistema import TelaSistema
 from modulos.produto.ControladorProduto import ControladorProduto
+from modulos.pedido.ControladorPedido import ControladorPedido
 
 
 class ControladorSistema:
@@ -13,7 +14,8 @@ class ControladorSistema:
         self.__controlador_usuario = ControladorUsuario(self)
         self.__controlador_restaurante = ControladorRestaurante(self)
         self.__controlador_produto = ControladorProduto(self)
-        self.__controlador_atendimento = ControladorAtendimento(self)
+        self.__controlador_pedido = ControladorPedido(self)
+        self.__controlador_atendimento = ControladorAtendimento(self, self.__controlador_pedido)
         self.__controlador_mesa = ControladorMesa(self, self.__controlador_atendimento)
         self.usuario_atual_eh_gerente = None
 
@@ -49,7 +51,7 @@ class ControladorSistema:
 
     def encerrar(self):
         exit(0)
-    
+
     def lotacao_maxima_restaurante(self) -> int:
         return self.__controlador_restaurante.restaurante.capacidade_maxima
 
