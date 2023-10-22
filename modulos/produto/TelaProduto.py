@@ -11,16 +11,16 @@ class TelaProduto:
         valor_tratado = ' '.join(
             [palavra[0].upper() + palavra[1:] for palavra in valor.split()])
         if not valor_tratado:
-            raise ValueError(f'Entrada inválida. {nome_campo} não pode ser vazio.')
-        if re.search('\d', valor_tratado):
+            raise ValueError(f'Entrada inválida. O campo {nome_campo.lower()} não pode ser vazio.')
+        if re.match(r'^\s*\d+(\s+\d+)*\s*$', valor_tratado):
             raise ValueError(
-                f'Entrada inválida. {nome_campo} não deve conter dígitos.')
+                f'Entrada inválida. O campo {nome_campo.lower()} não deve conter apenas dígitos e espaços.')
         if min_len and len(valor_tratado) < min_len:
             raise ValueError(
-                f'{nome_campo} deve ter no mínimo {min_len} caracteres!')
+                f'Entrada inválida. O campo {nome_campo.lower()} deve ter no mínimo {min_len} caracteres.')
         if max_len and len(valor_tratado) > max_len:
             raise ValueError(
-                f'{nome_campo} deve ter no máximo {max_len} caracteres!')
+                f'Entrada inválida. O campo {nome_campo.lower()} deve ter no máximo {max_len} caracteres.')
 
         return valor_tratado
         
@@ -28,10 +28,10 @@ class TelaProduto:
         try:
             return float(valor)
         except:
-            erro = 'Por favor, insira um número real'
+            erro = 'Entrada inválida. '
             if nome_campo:
-                raise ValueError(erro + f' no campo {nome_campo}.')
-            raise ValueError(erro + '.')
+                raise ValueError(erro + f'O campo {nome_campo.lower()} deve ser um valor real.')
+            raise ValueError(erro + 'Por favor, insira um número real.')
     
     def abre(self):
         return self.__window.Read()

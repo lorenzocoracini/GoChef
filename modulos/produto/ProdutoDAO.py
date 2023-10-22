@@ -31,7 +31,7 @@ class ProdutoDAO(DAO):
         """)
                 return True
         except Exception:
-            raise Exception('Esse produto já foi adicionado!')
+            raise Exception('Entrada inválida. Um produto com mesmo nome e mesma categoria já foi cadastrado no sistema.')
         
     def guardar(self):
         chaves = f"({','.join(self.atributos.keys())})"
@@ -48,7 +48,7 @@ class ProdutoDAO(DAO):
         """, valores)
                 return True
         except:
-            raise Exception('Esse produto já foi adicionado!')
+            raise Exception('Entrada inválida. Um produto com mesmo nome e mesma categoria já foi cadastrado no sistema.')
 
     @staticmethod
     def buscar() -> list:
