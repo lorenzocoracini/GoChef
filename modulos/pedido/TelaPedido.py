@@ -10,7 +10,7 @@ class TelaPedido:
         self.pedido = []
         self.produtos = []
 
-    def detalhes_do_pedido(self, pedido:list):
+    def detalhes_do_pedido(self, pedido: list):
         lista_de_produtos = []
         for produto in pedido:
             lista_de_produtos.append(
@@ -67,8 +67,13 @@ class TelaPedido:
         while True:
             event, values = self.__window.read()
 
-            if event in (sg.WIN_CLOSED, 'Concluir Pedido', 'Voltar'):
+            if event in (sg.WIN_CLOSED, 'Voltar'):
                 break
+
+            if event == 'Concluir Pedido':
+                if not self.pedido:
+                    sg.popup("Adicione produtos ao pedido antes de concluí-lo.")
+
 
             # Adiciona
             elif event == 'Adicionar Quantia Do Produto ao Pedido':
