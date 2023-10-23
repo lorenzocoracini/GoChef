@@ -32,7 +32,8 @@ class ControladorProduto:
             {
                 'nome': produto.nome,
                 'id': produto.identificador,
-                'valor': produto.valor
+                'valor': produto.valor,
+                'categoria':produto.categoria
             } for produto in self.__produtos
         ]
     

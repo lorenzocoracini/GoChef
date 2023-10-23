@@ -36,7 +36,7 @@ class MesaDAO(DAO):
                   taxa_servico, 
                   valor_total 
                 FROM {AtendimentoDAO.nome_tabela} 
-                WHERE mesa = {self.identificador}""")
+                WHERE mesa_id = {self.identificador}""")
             return [dict(row) for row in res.fetchall()]
         except:
             return
@@ -84,5 +84,5 @@ class MesaDAO(DAO):
             res = MesaDAO.cursor.execute(
                 f"SELECT * FROM {MesaDAO.nome_tabela}")
             return [dict(row) for row in res.fetchall()]
-        except:
+        except Exception as err:
             raise ErroEntradaVazia

@@ -6,12 +6,21 @@ class TelaMesa:
         sg.ChangeLookAndFeel('Material2')
         self.__window = None
 
-    def lista_mesas(self, mesas: list, eh_gerente: bool):
+    def lista_mesas(self, mesas_atendidas: list, mesas_nao_atendidas: list, eh_gerente: bool):
+        print("mesas_atendidas ---- ", mesas_atendidas)
+        print("mesas_nao_atendidas ---- ", mesas_nao_atendidas)
         lista_de_mesas = []
-        for mesa in mesas:
+        for mesa in mesas_nao_atendidas:
             lista_de_mesas.append(
                 [sg.Text(f'- Mesa {mesa.numero_mesa}'),
                  sg.Button('Iniciar atendimento', key=f"atendimento {mesa.id}"),
+                 sg.Button('Editar', key=f"editar {mesa.id}", visible=eh_gerente),
+                 sg.Button('Excluir', key=f"excluir {mesa.id}", visible=eh_gerente)
+                 ])
+        for mesa in mesas_atendidas:
+            lista_de_mesas.append(
+                [sg.Text(f'- Mesa {mesa.numero_mesa}'),
+                 sg.Button('Detalhes', key=f"atendimento {mesa.id}"),
                  sg.Button('Editar', key=f"editar {mesa.id}", visible=eh_gerente),
                  sg.Button('Excluir', key=f"excluir {mesa.id}", visible=eh_gerente)
                  ])
@@ -111,8 +120,8 @@ class TelaMesa:
 
     def confirma_exclusao_mesa(self, numero_mesa: int):
         mensagem_confirmacao = f'''
-            Você tem certeza que deseja excluir a Mesa {numero_mesa}?
-        '''
+                Você tem certeza que deseja excluir a Mesa {numero_mesa}?
+            '''
         layout = [
             [sg.Text(mensagem_confirmacao)],
             [sg.Button('Não'), sg.Button('Sim')]
