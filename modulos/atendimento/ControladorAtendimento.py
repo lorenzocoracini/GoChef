@@ -72,8 +72,9 @@ class ControladorAtendimento:
         if not len(self.colecao):
             raise ErroEntradaVazia
         try:
-            index = [x.id for x in self.colecao].index(id)
+            dados = self.__carregar_dados()
+            index = [x.id for x in dados].index(id)
         except ValueError:
             raise ErroNaoEncontrado
-        objeto = self.colecao[index]
+        objeto = dados[index]
         return (objeto, index)
