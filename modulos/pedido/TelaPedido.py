@@ -10,13 +10,11 @@ class TelaPedido:
         self.pedido = []
         self.produtos = []
 
-    def detalhes_do_pedido(self, pedido):
+    def detalhes_do_pedido(self, pedido:list):
         lista_de_produtos = []
-        valor_total = 0
         for produto in pedido:
-            valor_total += ((produto.valor) * produto.quantidade)
             lista_de_produtos.append(
-                [sg.Text(f'Nome: {produto.nome} - Quantidade: {produto.quantidade} - Valor: {produto.valor}')]
+                [sg.Text(f'Id Produto: {produto["id"]} - Quantidade: {produto["quantidade"]}')]
             )
         layout = [
             [sg.Text("Detalhes do Pedido")],

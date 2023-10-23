@@ -145,6 +145,10 @@ class ControladorMesa:
             [objeto, _] = self.__buscar_por_id(id)
             if self.__tela.confirma_exclusao_mesa(objeto.numero_mesa):
                 objeto.remover()
+            if objeto in self.__mesas_atendidas:
+                self.__mesas_atendidas.remove(objeto)
+            if objeto in self.__mesas_nao_atendidas:
+                self.__mesas_nao_atendidas.remove(objeto)
         except (ErroEntradaVazia, ErroNaoEncontrado):
             raise
         except:

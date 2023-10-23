@@ -32,6 +32,21 @@ class PedidoDAO(DAO):
         except Exception:
             raise Exception('Esse pedido já foi adicionado!')
 
+    def buscar_produtos_pedidos_2(self, pedido_id) -> list:
+        print(pedido_id, 'pedido_id')
+        try:
+            res = PedidoDAO.cursor.execute(
+                f"""SELECT 
+                  id, 
+                  produto_id, 
+                  quantidade
+                FROM ProdutoPedido
+                WHERE pedido_id = '{pedido_id}'""")
+            ret = [dict(row) for row in res.fetchall()]
+            return ret
+        except Exception as err:
+            return
+
     def buscar_produtos_pedidos(self) -> list:
         try:
             res = PedidoDAO.cursor.execute(
