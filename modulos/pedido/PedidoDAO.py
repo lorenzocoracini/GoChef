@@ -42,10 +42,23 @@ class PedidoDAO(DAO):
                   pedido_id 
                 FROM {ProdutoPedidoDAO.nome_tabela} 
                 WHERE pedido_id = ?""", (self.identificador,))
+
             ret = [dict(row) for row in res.fetchall()]
             return ret
         except Exception as err:
             return
+
+    def remover_pedido(self, id):
+        try:
+            with self.conexao:
+                self.cursor.execute(f"""
+          DELETE 
+          FROM pedido
+          WHERE id = '{id}'
+        """)
+                return True
+        except Exception:
+            raise
 
     def guardar(self):
         atributos = [

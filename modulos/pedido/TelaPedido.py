@@ -10,6 +10,34 @@ class TelaPedido:
         self.pedido = []
         self.produtos = []
 
+    def detalhes_do_pedido(self, pedido):
+        lista_de_produtos = []
+        valor_total = 0
+        for produto in pedido:
+            valor_total += ((produto.valor) * produto.quantidade)
+            lista_de_produtos.append(
+                [sg.Text(f'Nome: {produto.nome} - Quantidade: {produto.quantidade} - Valor: {produto.valor}')]
+            )
+        layout = [
+            [sg.Text("Detalhes do Pedido")],
+            [sg.Column(lista_de_produtos, key='produtos')],
+            [sg.Button('Voltar')]
+        ]
+        self.__window = sg.Window('GoChef').layout(layout)
+
+        while True:
+            event, values = self.__window.read()
+            if event == sg.WIN_CLOSED:
+                exit(0)
+            if event == 'Voltar':
+                self.fechar_tela()
+                return {'voltar': True}
+            else:
+                self.fechar_tela()
+
+    def fechar_tela(self):
+        self.__window.Close()
+
     def atualiza_resumo_do_pedido(self):
         total_pedido = sum(item['quantidade'] * item['valor'] for item in self.pedido)
         pedido_text = ''

@@ -34,6 +34,11 @@ class ControladorAtendimento:
         detalhe = self.__tela.detalhes_atendimento(pedidos)
         if "adicionar_pedido" in detalhe:
             self.cria_atendimento_e_pedido(mesa_id, mesa, atendimento_id)
+        elif "visualizar" in detalhe:
+            self.__controlador_pedido.detalhes_do_pedido(detalhe['visualizar'])
+
+        elif "excluir" in detalhe:
+            self.__controlador_pedido.excluir_pedido(detalhe['excluir'])
         else:
             return
 
