@@ -1,4 +1,5 @@
 from abstrato.DAO import DAO
+from modulos.produto_pedido.ProdutoPedidoDAO import ProdutoPedidoDAO
 
 
 class PedidoDAO(DAO):
@@ -11,7 +12,9 @@ class PedidoDAO(DAO):
         with self.conexao:
             self.cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS {self.nome_tabela} (
-                id  INTEGER PRIMARY KEY
+                id  TEXT PRIMARY KEY,
+                atendimento_id INTEGER NOT NULL,
+                FOREIGN KEY (atendimento_id) REFERENCES Atendimento (id) ON DELETE RESTRICT
             )
         ''')
             return True
@@ -28,6 +31,21 @@ class PedidoDAO(DAO):
                 return True
         except Exception:
             raise Exception('Esse pedido já foi adicionado!')
+
+    def buscar_produtos_pedidos(self) -> list:
+        try:
+            res = PedidoDAO.cursor.execute(
+                f"""SELECT 
+                  id, 
+                  produto_id, 
+                  quantidade,
+                  pedido_id 
+                FROM {ProdutoPedidoDAO.nome_tabela} 
+                WHERE pedido_id = ?""", (self.identificador,))
+            ret = [dict(row) for row in res.fetchall()]
+            return ret
+        except Exception as err:
+            return
 
     def guardar(self):
         atributos = [
@@ -46,8 +64,6 @@ class PedidoDAO(DAO):
                 self.cursor.execute(sql, valores)
                 return True
         except Exception as err:
-            print("print-----", err)
-            print("Generated SQL:", sql)
             raise Exception('Esse pedido já foi adicionado!')
 
     @staticmethod

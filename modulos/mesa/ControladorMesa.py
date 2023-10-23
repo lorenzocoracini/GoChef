@@ -12,6 +12,8 @@ class ControladorMesa:
         self.__controlador_atendimento = controlador_atendimento
         self.__mesas = []
         self.__tela = TelaMesa()
+        self.__mesas_atendidas = []
+        self.__mesas_nao_atendidas = []
         try:
             self.__carregar_dados()
         except ErroEntradaVazia:
@@ -25,22 +27,42 @@ class ControladorMesa:
     def colecao(self, colecao):
         self.__mesas = colecao
 
-    # def mesas_atendidas_e_nao_atendidas(self):
-    #     mesas_com_atendimeto = []
-    #     mesas_para_inicar_atendimento = []
-    #     for mesa in self.colecao:
-    #         if mesa.atendimentos != None:
-    #             for atendimento in mesa.atendimentos:
-    #                 if not atendimento.encerrado:
-    #                     mesas_com_atendimeto.append(mesa)
-    #                 else:
-    #                     mesas_para_inicar_atendimento.append(mesa)
-    #     print('--', mesas_com_atendimeto, '--', mesas_para_inicar_atendimento)
-    #     return mesas_com_atendimeto, mesas_para_inicar_atendimento
+    @property
+    def mesas_atendidas(self):
+        return self.__mesas_atendidas
+
+    @mesas_atendidas.setter
+    def mesas_atendidas(self, colecao):
+        self.__mesas_atendidas = colecao
+
+    @property
+    def mesas_nao_atendidas(self):
+        return self.__mesas_nao_atendidas
+
+    @mesas_nao_atendidas.setter
+    def mesas_nao_atendidas(self, colecao):
+        self.__mesas_nao_atendidas = colecao
+
+    def mesas_atendidas_e_nao_atendidas(self):
+        dados = self.__carregar_dados()
+        for mesa in dados:
+            if mesa.atendimentos:
+                for atendimento in mesa.atendimentos:
+                    if atendimento["encerrado"] == 0:
+                        if mesa not in self.__mesas_atendidas:
+                            self.__mesas_atendidas.append(mesa)
+                        if mesa in self.__mesas_nao_atendidas:
+                            self.__mesas_nao_atendidas.remove(mesa)
+            else:
+                if mesa not in self.__mesas_nao_atendidas:
+                    self.__mesas_nao_atendidas.append(mesa)
 
     def listar_mesas(self):
-        opcoes = self.__tela.lista_mesas(self.colecao,
-                                         self.__controlador_sistema.usuario_atual_eh_gerente)
+        if len(self.colecao) > 0:
+            self.mesas_atendidas_e_nao_atendidas()
+        opcoes = self.__tela.lista_mesas(mesas_nao_atendidas=self.__mesas_nao_atendidas,
+                                         mesas_atendidas=self.__mesas_atendidas,
+                                         eh_gerente=self.__controlador_sistema.usuario_atual_eh_gerente)
         if 'adicionar' in opcoes:
             self.cadastrar_mesa()
 
@@ -60,7 +82,13 @@ class ControladorMesa:
         self.__cadastrar(dados)
 
     def detalhes_atendimento(self, id):
-        self.__controlador_atendimento.detalhes_atendimento(id)
+        mesa, _ = self.__buscar_por_id(id)
+        if mesa.atendimentos:
+            atendimento_id = mesa.atendimentos[-1]['id']
+        else:
+            atendimento_id = None
+        self.__controlador_atendimento.detalhes_atendimento(mesa_id=id, atendimento_id=atendimento_id,
+                                                            mesa=mesa)
 
     def __editar_mesa(self, id):
         (mesa, _) = self.__buscar_por_id(id)
@@ -131,6 +159,7 @@ class ControladorMesa:
             atendimentos = objeto.buscar_atendimentos()
             objeto.atendimentos = atendimentos
             self.colecao.append(objeto)
+        return self.colecao
 
     def __buscar_por_id(self, id: int):
         if not len(self.colecao):

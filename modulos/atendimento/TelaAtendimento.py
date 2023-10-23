@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 
 
-class TelaAtendimeno:
+class TelaAtendimento:
     def __init__(self):
         sg.ChangeLookAndFeel('Material2')
         self.__window = None
@@ -11,7 +11,7 @@ class TelaAtendimeno:
         for (index, pedido) in enumerate(pedidos):
             lista_de_pedidos.append(
                 [sg.Text(f'- Pedido {index + 1}'),
-                 sg.Button('Excluir', key=f"excluir {pedido.id}")
+                 sg.Button('Excluir', key=f"excluir {pedido['id']}")
                  ])
 
         layout = [

@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
 
+from modulos.produto.CategoriaProduto import CategoriaProduto
+
 
 class TelaPedido:
     def __init__(self):
@@ -22,10 +24,13 @@ class TelaPedido:
         layout = [
             [sg.Text('Selecione o produto:')],
             [sg.Listbox(
-                [(f"{produto['nome']} (ID: {produto['id']}, R${produto['valor']:.2f})") for produto in produtos],
+                [(
+                    f"{produto['nome']} (ID: {produto['id']}, R${produto['valor']:.2f}, Categoria: {CategoriaProduto(produto['categoria']).name.lower()})")
+                    for produto in produtos],
                 size=(30, 6), key='produto_list')],
             [sg.Text('Quantidade:'), sg.InputText(key='quantidade')],
-            [sg.Button('Adicionar Quantia Do Produto ao Pedido'), sg.Button('Retirar Produto do Pedido'), sg.Button('Concluir Pedido'),
+            [sg.Button('Adicionar Quantia Do Produto ao Pedido'), sg.Button('Retirar Produto do Pedido'),
+             sg.Button('Concluir Pedido'),
              sg.Button('Voltar')],
             [sg.Text('Itens no Pedido:')],
             [sg.Multiline('', size=(40, 10), key='pedido_text', autoscroll=True)],
@@ -85,7 +90,6 @@ class TelaPedido:
         # Final
         self.__window.close()
         return self.pedido, event
-
 
 # if __name__ == '__main__':
 #     produtos = [

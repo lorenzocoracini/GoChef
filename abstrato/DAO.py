@@ -31,7 +31,7 @@ class DAO(ABC):
         return attributos_classe
 
     @property
-    def identificador(self):
+    def identificador(self) -> str:
         return self.id
 
     @abstractmethod
@@ -47,7 +47,7 @@ class DAO(ABC):
         chaves = f"({','.join(self.atributos.keys())})"
         valores = tuple([v.identificador if isinstance(
             v, DAO) else v for v in self.atributos.values()])
-        parametros = '('+','.join('?' for _ in valores)+')'
+        parametros = '(' + ','.join('?' for _ in valores) + ')'
 
         try:
             with self.conexao:
