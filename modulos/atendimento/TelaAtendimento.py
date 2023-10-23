@@ -49,7 +49,6 @@ class TelaAtendimento:
             if event.startswith('visualizar'):
                 pedido_id = event.split().pop()
                 self.fechar_tela()
-                print('pedido_id', pedido_id)
                 return {'visualizar': pedido_id}
 
             else:

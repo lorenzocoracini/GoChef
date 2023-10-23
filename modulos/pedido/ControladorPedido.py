@@ -47,7 +47,6 @@ class ControladorPedido:
     def excluir_pedido(self, pedido_id):
         try:
             pedido, _ = self.__buscar_por_id(pedido_id)
-            print(pedido)
             pedido.remover_pedido(pedido_id)
         except (ErroEntradaVazia, ErroNaoEncontrado):
             raise
@@ -56,8 +55,9 @@ class ControladorPedido:
 
     def detalhes_do_pedido(self, pedido_id):
         pedido, _ = self.__buscar_por_id(pedido_id)
-        prod_ped = pedido.buscar_produtos_pedidos()
+        prod_ped = pedido.buscar_produtos_pedidos_2(pedido_id)
         print(prod_ped)
+        self.__tela.detalhes_do_pedido(prod_ped)
 
     def __buscar_por_id(self, id: int):
         self.__carregar_dados()
