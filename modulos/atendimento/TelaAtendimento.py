@@ -11,9 +11,9 @@ class TelaAtendimento:
         for (index, pedido) in enumerate(pedidos):
             lista_de_pedidos.append(
                 [sg.Text(f'- Pedido {index + 1}'),
+                 sg.Button('Visualizar', key=f"visualizar {pedido['id']}"),
                  sg.Button('Excluir', key=f"excluir {pedido['id']}")
                  ])
-
         layout = [
             [sg.Text("Detalhes da Mesa")],
             [sg.Column(lista_de_pedidos, key='pedidos') if len(lista_de_pedidos) > 0 else sg.Text(
@@ -45,6 +45,12 @@ class TelaAtendimento:
                 pedido_id = event.split().pop()
                 self.fechar_tela()
                 return {'excluir': pedido_id}
+
+            if event.startswith('visualizar'):
+                pedido_id = event.split().pop()
+                self.fechar_tela()
+                print('pedido_id', pedido_id)
+                return {'visualizar': pedido_id}
 
             else:
                 self.fechar_tela()

@@ -7,8 +7,6 @@ class TelaMesa:
         self.__window = None
 
     def lista_mesas(self, mesas_atendidas: list, mesas_nao_atendidas: list, eh_gerente: bool):
-        print("mesas_atendidas ---- ", mesas_atendidas)
-        print("mesas_nao_atendidas ---- ", mesas_nao_atendidas)
         lista_de_mesas = []
         for mesa in mesas_nao_atendidas:
             lista_de_mesas.append(

@@ -34,6 +34,11 @@ class ControladorAtendimento:
         detalhe = self.__tela.detalhes_atendimento(pedidos)
         if "adicionar_pedido" in detalhe:
             self.cria_atendimento_e_pedido(mesa_id, mesa, atendimento_id)
+        elif "visualizar" in detalhe:
+            self.__controlador_pedido.detalhes_do_pedido(detalhe['visualizar'])
+
+        elif "excluir" in detalhe:
+            self.__controlador_pedido.excluir_pedido(detalhe['excluir'])
         else:
             return
 
@@ -72,8 +77,9 @@ class ControladorAtendimento:
         if not len(self.colecao):
             raise ErroEntradaVazia
         try:
-            index = [x.id for x in self.colecao].index(id)
+            dados = self.__carregar_dados()
+            index = [x.id for x in dados].index(id)
         except ValueError:
             raise ErroNaoEncontrado
-        objeto = self.colecao[index]
+        objeto = dados[index]
         return (objeto, index)
