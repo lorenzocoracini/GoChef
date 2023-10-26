@@ -43,7 +43,7 @@ class ControladorMesa:
     def mesas_nao_atendidas(self, colecao):
         self.__mesas_nao_atendidas = colecao
 
-    def mesas_atendidas_e_nao_atendidas(self):
+    def __mesas_atendidas_e_nao_atendidas(self):
         dados = self.__carregar_dados()
         for mesa in dados:
             if mesa.atendimentos:
@@ -59,7 +59,7 @@ class ControladorMesa:
 
     def listar_mesas(self):
         if len(self.colecao) > 0:
-            self.mesas_atendidas_e_nao_atendidas()
+            self.__mesas_atendidas_e_nao_atendidas()
         opcoes = self.__tela.lista_mesas(mesas_nao_atendidas=self.__mesas_nao_atendidas,
                                          mesas_atendidas=self.__mesas_atendidas,
                                          eh_gerente=self.__controlador_sistema.usuario_atual_eh_gerente)
@@ -111,6 +111,7 @@ class ControladorMesa:
             self.__carregar_dados()
         except ErroValorUnico:
             self.__tela.mostra_mensagem("Já existe uma mesa com este número de mesa")
+            self.cadastrar_mesa()
         except:
             raise ValueError
 
@@ -137,6 +138,7 @@ class ControladorMesa:
             self.__tela.mostra_mensagem("Já existe uma mesa com este número de mesa")
             for chave, valor in atributos_originais:
                 if chave != 'id': setattr(objeto, chave, valor)
+            self.__editar_mesa(id)
         except:
             raise ValueError
 
@@ -145,10 +147,11 @@ class ControladorMesa:
             [objeto, _] = self.__buscar_por_id(id)
             if self.__tela.confirma_exclusao_mesa(objeto.numero_mesa):
                 objeto.remover()
-            if objeto in self.__mesas_atendidas:
-                self.__mesas_atendidas.remove(objeto)
-            if objeto in self.__mesas_nao_atendidas:
-                self.__mesas_nao_atendidas.remove(objeto)
+                if objeto in self.__mesas_atendidas:
+                    self.__mesas_atendidas.remove(objeto)
+                if objeto in self.__mesas_nao_atendidas:
+                    self.__mesas_nao_atendidas.remove(objeto)
+            self.listar_mesas()
         except (ErroEntradaVazia, ErroNaoEncontrado):
             raise
         except:
