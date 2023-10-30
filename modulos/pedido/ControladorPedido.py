@@ -26,23 +26,26 @@ class ControladorPedido:
 
     def criar_pedido(self, atendimento_id):
         produtos = self.pega_produtos_cadastrados()
-        produtos_do_pedido, event = self.__tela.criar_pedido(produtos)
+        if len(produtos) == 0:
+            self.__tela.mostra_mensagem_erro("Nenhum produto cadastrado")
+        else:
+            produtos_do_pedido, event = self.__tela.criar_pedido(produtos)
+            if event not in ('Voltar', None):
+                pedido_obj = Pedido(atendimento_id=atendimento_id)
+                pedido_obj.guardar()
 
-        pedido_obj = Pedido(atendimento_id=atendimento_id)
-        pedido_obj.guardar()
+                pedido_id = pedido_obj.identificador
 
-        pedido_id = pedido_obj.identificador
+                for produto in produtos_do_pedido:
+                    produto_id: int = produto['id']
+                    quantidade: int = produto['quantidade']
 
-        for produto in produtos_do_pedido:
-            produto_id: int = produto['id']
-            quantidade: int = produto['quantidade']
+                    produto_pedido = ProdutoPedido(produto_id, quantidade, pedido_id)
+                    produto_pedido.guardar()
 
-            produto_pedido = ProdutoPedido(produto_id, quantidade, pedido_id)
-            produto_pedido.guardar()
+                self.__carregar_dados()
 
-        self.__carregar_dados()
-
-        return produtos_do_pedido
+                return produtos_do_pedido
 
     def excluir_pedido(self, pedido_id):
         try:
@@ -56,7 +59,6 @@ class ControladorPedido:
     def detalhes_do_pedido(self, pedido_id):
         pedido, _ = self.__buscar_por_id(pedido_id)
         prod_ped = pedido.buscar_produtos_pedidos_2(pedido_id)
-        print(prod_ped)
         self.__tela.detalhes_do_pedido(prod_ped)
 
     def __buscar_por_id(self, id: int):

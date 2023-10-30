@@ -11,6 +11,7 @@ class TelaPedido:
         self.produtos = []
 
     def detalhes_do_pedido(self, pedido: list):
+        self.pedido = []
         lista_de_produtos = []
         for produto in pedido:
             lista_de_produtos.append(
@@ -35,6 +36,9 @@ class TelaPedido:
 
     def fechar_tela(self):
         self.__window.Close()
+
+    def mostra_mensagem_erro(self, mensagem: str) -> None:
+        sg.popup_error(mensagem)
 
     def atualiza_resumo_do_pedido(self):
         total_pedido = sum(item['quantidade'] * item['valor'] for item in self.pedido)
@@ -71,11 +75,12 @@ class TelaPedido:
                 break
 
             if event == 'Concluir Pedido':
-                if not self.pedido:
+                if len(self.pedido) == 0:
                     sg.popup("Adicione produtos ao pedido antes de concluí-lo.")
+                else:
+                    break
 
-
-            # Adiciona
+                    # Adiciona
             elif event == 'Adicionar Quantia Do Produto ao Pedido':
                 quantidade = values['quantidade'].strip()
 
