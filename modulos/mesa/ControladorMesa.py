@@ -43,7 +43,7 @@ class ControladorMesa:
     def mesas_nao_atendidas(self, colecao):
         self.__mesas_nao_atendidas = colecao
 
-    def mesas_atendidas_e_nao_atendidas(self):
+    def __mesas_atendidas_e_nao_atendidas(self):
         dados = self.__carregar_dados()
         for mesa in dados:
             if mesa.atendimentos:
@@ -59,29 +59,28 @@ class ControladorMesa:
 
     def listar_mesas(self):
         if len(self.colecao) > 0:
-            self.mesas_atendidas_e_nao_atendidas()
+            self.__mesas_atendidas_e_nao_atendidas()
         opcoes = self.__tela.lista_mesas(mesas_nao_atendidas=self.__mesas_nao_atendidas,
                                          mesas_atendidas=self.__mesas_atendidas,
                                          eh_gerente=self.__controlador_sistema.usuario_atual_eh_gerente)
         if 'adicionar' in opcoes:
-            self.cadastrar_mesa()
+            self.__cadastrar_mesa()
 
         if 'atendimento' in opcoes:
-            self.detalhes_atendimento(int(opcoes['atendimento']))
+            self.__detalhes_atendimento(int(opcoes['atendimento']))
 
         if 'editar' in opcoes:
             self.__editar_mesa(int(opcoes['editar']))
 
         if 'excluir' in opcoes:
             self.__excluir(int(opcoes['excluir']))
-            self.__carregar_dados()
 
-    def cadastrar_mesa(self):
+    def __cadastrar_mesa(self):
         dados = self.__tela.mostra_formulario()
         if 'voltar' in dados: return
         self.__cadastrar(dados)
 
-    def detalhes_atendimento(self, id):
+    def __detalhes_atendimento(self, id):
         mesa, _ = self.__buscar_por_id(id)
         if mesa.atendimentos:
             atendimento_id = mesa.atendimentos[-1]['id']
@@ -104,13 +103,14 @@ class ControladorMesa:
         if self.__ultrapassa_capacidade_maxima(dados['numero_lugares'], self.colecao):
             self.__tela.mostra_mensagem(
                 f"O restaurante não tem capacidade suficiente para uma nova mesa com {dados['numero_lugares']} lugares")
-            return
+            self.__cadastrar_mesa()
         try:
             nova_mesa = Mesa(**dados)
             nova_mesa.guardar()
             self.__carregar_dados()
         except ErroValorUnico:
             self.__tela.mostra_mensagem("Já existe uma mesa com este número de mesa")
+            self.__cadastrar_mesa()
         except:
             raise ValueError
 
@@ -125,7 +125,7 @@ class ControladorMesa:
                                                    list(filter(lambda mesa: mesa.id != id, self.colecao))):
                 self.__tela.mostra_mensagem(
                     f"O restaurante não tem capacidade suficiente para uma mesa com {dados['numero_lugares']} lugares")
-                return
+                self.__editar_mesa(id)
 
             atributos_originais = objeto.atributos.items()
             for chave, valor in dados.items():
@@ -137,6 +137,7 @@ class ControladorMesa:
             self.__tela.mostra_mensagem("Já existe uma mesa com este número de mesa")
             for chave, valor in atributos_originais:
                 if chave != 'id': setattr(objeto, chave, valor)
+            self.__editar_mesa(id)
         except:
             raise ValueError
 
@@ -145,10 +146,11 @@ class ControladorMesa:
             [objeto, _] = self.__buscar_por_id(id)
             if self.__tela.confirma_exclusao_mesa(objeto.numero_mesa):
                 objeto.remover()
-            if objeto in self.__mesas_atendidas:
-                self.__mesas_atendidas.remove(objeto)
-            if objeto in self.__mesas_nao_atendidas:
-                self.__mesas_nao_atendidas.remove(objeto)
+                if objeto in self.__mesas_atendidas:
+                    self.__mesas_atendidas.remove(objeto)
+                if objeto in self.__mesas_nao_atendidas:
+                    self.__mesas_nao_atendidas.remove(objeto)
+            self.listar_mesas()
         except (ErroEntradaVazia, ErroNaoEncontrado):
             raise
         except:

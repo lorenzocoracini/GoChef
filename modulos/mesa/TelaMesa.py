@@ -88,7 +88,7 @@ class TelaMesa:
                     self.fechar_tela()
                     return campos_validados
 
-            if event == 'Voltar':
+            elif event == 'Voltar':
                 self.fechar_tela()
                 return {'voltar': True}
 
@@ -103,7 +103,7 @@ class TelaMesa:
             if numero_mesa < 0:
                 raise ValueError
         except ValueError:
-            self.mostra_mensagem('O número da mesa deve ser um número inteiro positivo')
+            self.mostra_mensagem('O número da mesa deve ser um número inteiro maior ou igual a zero')
             return False
 
         try:
@@ -111,7 +111,7 @@ class TelaMesa:
             if numero_lugares < 1:
                 raise ValueError
         except ValueError:
-            self.mostra_mensagem('O número da mesa deve ser um número inteiro positivo maior que 1')
+            self.mostra_mensagem('O número de lugares deve ser um número inteiro positivo')
             return False
 
         return {'numero_mesa': numero_mesa, 'numero_lugares': numero_lugares}
