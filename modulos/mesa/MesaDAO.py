@@ -64,7 +64,8 @@ class MesaDAO(DAO):
 
     def atualizar(self):
         set_statement = ', '.join([f"{k} = '{v}'" for k, v in self.atributos.items(
-        ) if not isinstance(v, DAO) and v is not None])
+        ) if k == 'numero_lugares' or k == 'numero_mesa'])
+
         try:
             with self.conexao:
                 self.cursor.execute(f"""
